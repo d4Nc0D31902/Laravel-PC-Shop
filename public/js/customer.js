@@ -122,6 +122,11 @@ $(document).ready(function () {
                     return "<a href='#' class='deletebtn' data-id=" + data.customer_id + "><i class='fa-sharp fa-solid fa-trash' style='font-size:30px; color:red'></a></i>";
                 },
             },
+            {data: null,
+                render: function (data, type, row) {
+                    return "<a href='#' class='restorebtn' data-id=" + data.customer_id + "><i class='fa-solid fa-rotate-right' style='font-size:30px; color:red'></a></i>";
+                },  orderable: false, searchable: false
+            },
         ]
         
     })//end datatables
@@ -150,22 +155,23 @@ $("#customerSubmit").on("click", function (e) {
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
         dataType:"json", 
 
-
-        
-        success:function(response){
-            console.log(data);
-            $("#customerModal").modal("hide");
-
-            var $ctable = $('#ctable').DataTable();
-            $ctable.row.add(data.customer).draw(false); 
-            // if (response == 'success') {
-               
-            // } else if (response == 'errors') {
-            //     jQuery.each(data.errors, function(key, value){
-            //         jQuery('.alert-danger').show();
-            //         jQuery('.alert-danger').append('<p>'+value+'</p>');
-            //     });
-            // }
+        success:function(data){
+            
+            if (data.errors) {
+                // jQuery.each(data.errors, function(key, value){
+                // jQuery('.alert-danger').show();
+                // jQuery('.alert-danger').append('<p>'+value+'</p>');
+                // });
+                bootbox.alert({
+                    message: "Error please complete the form first!",
+                    className: 'rubberBand animated'});
+            } else {
+                console.log(data);
+                $("#customerModal").modal("hide");
+                
+                var $ctable = $('#ctable').DataTable();
+                $ctable.row.add(data.customer).draw(false); 
+            }
         },
 
         error:function (error){
@@ -192,8 +198,8 @@ $("#ctable tbody").on("click", "a.editBtn", function (e) {
                console.log(data);
                $("#cccustomer_id").val(data.customer_id);
                $("#cctitle").val(data.title);
-               $("#ccfname").val(data.fname);
                $("#cclname").val(data.lname);
+               $("#ccfname").val(data.fname);
                $("#ccaddressline").val(data.addressline);
                $("#cctown").val(data.town);
                $("#cczipcode").val(data.zipcode);
@@ -228,12 +234,46 @@ $("#ctable tbody").on("click", "a.editBtn", function (e) {
                 console.log(data);
                 $('#editCustomerModal').modal("hide");
                 table.row(cRow).data(data).invalidate().draw(false);
+                // window.location.reload();
             },
             error: function(error) {
                 console.log(error);
             }
         });
     });//end update
+
+    // $("#updatebtnCustomer").on('click', function(e) {
+    //     e.preventDefault();
+    //     var id = $('#cccustomer_id').val();
+    //     var data = $('#cusform')[0];
+       
+    //     var formData = new FormData(data);
+    //     //var data = $("#updateItemform").serialize();
+
+    //     var table =$('#ctable').DataTable();
+    //     console.log(data);
+    //     // var cRow = $("tr td:contains(" + id + ")").closest('tr');
+    //     // var data =$("#cusform").serialize();
+
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "api/customer/"+ id,
+    //         data: formData,
+    //         contentType: false,
+    //         processData: false,
+    //         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+    //         dataType: "json",
+    //         success: function(data) {
+    //             console.log(data);
+    //             $('#editCustomerModal').modal("hide");
+    //             // table.row(cRow).data(data).invalidate().draw(false);
+    //             window.location.reload();
+    //         },
+    //         error: function(error) {
+    //             console.log(error);
+    //         }
+    //     });
+    // });//end update
 
 
     $("#ctable tbody").on("click", "a.deletebtn", function (e) {

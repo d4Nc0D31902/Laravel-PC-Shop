@@ -64,14 +64,14 @@ class CustomerController extends Controller
     public function store(Request $request)
     {   
 
-        // $validator = \Validator::make($request->all(), [
-        //     'email' => 'email| required| unique:users',
-        //     'password' => 'required| min:3'
-        // ]);
+        $validator = \Validator::make($request->all(), [
+            'email' => 'email| required| unique:users',
+            'password' => 'required| min:3'
+        ]);
         
-        // if($validator->fails()){
-        //     return response()->json(['errors'=>$validator->errors()->all()]);
-        // }
+        if($validator->fails()){
+            return response()->json(['errors'=>$validator->errors()->all()]);
+        }
 
         $user = new User([
             'name' => $request->input('fname').' '.$request->lname,
@@ -133,23 +133,19 @@ class CustomerController extends Controller
     public function update(Request $request, $id)
     {
         $customer = Customer::find($id);
+        $customer->title = $request->title;
+        $customer->fname = $request->fname;
+        $customer->lname = $request->lname;
+        $customer->addressline = $request->addressline;
+        $customer->zipcode = $request->zipcode;
+        $customer->town = $request->town;
+        $customer->phone = $request->phone;
+        // $files = $request->hasFile('uploads');
+        // $customer->imagePath = 'images/'.$files->getClientOriginalName();
+        $customer->save();
+        // Storage::put('/public/images/'.$files->getClientOriginalName(),file_get_contents($files));   
 
-        if($file = $request->hasFile('uploads')) {
-            $customer->user_id = $user->id;
-        	$customer->title = $request->title;
-        	$customer->fname = $request->fname;
-        	$customer->lname = $request->lname;
-        	$customer->addressline = $request->addressline;
-        	$customer->zipcode = $request->zipcode;
-        	$customer->town = $request->town;
-        	$customer->phone = $request->phone;
-            $file = $request->hasFile('uploads');
-            $customer->imagePath = 'images/'.$files->getClientOriginalName();
-            $customer->update();
-            Storage::put('/public/images/'.$files->getClientOriginalName(),file_get_contents($files));   
-        }
-
-        return response()->json(["success" => "Customer created successfully.","customer" => $customer ,"status" => 200]);
+        return response()->json($customer);
     }
 
     /**

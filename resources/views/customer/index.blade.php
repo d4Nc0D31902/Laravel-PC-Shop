@@ -116,8 +116,9 @@
             <div class="modal-body">
                 <form id="cusform" method="PUT" action="#" enctype="multipart/form-data">
                     {{-- <input type="hidden"> --}}
-                    <input type="hidden" class="form-control" id="cccustomer_id" name="customer_id">
-                    <div class="row">
+                    <label for="cccustomer_id" class="control-label">Customer ID</label>
+                    <input type="text" class="form-control" id="cccustomer_id" name="customer_id" readonly>
+                    <div class="row mt-2">
                         <div class="col">
                             <label for="cclname" class="control-label">Title</label>
                             <input type="text" class="form-control" placeholder="Mr." id="cctitle" name="title">
@@ -154,7 +155,7 @@
                         </div>  
                     </div>
 
-                    <div class="row mt-2">
+                    {{-- <div class="row mt-2">
                         <div class="col">
                             <label for="ccemail" class="control-label">Email</label>
                             <input type="email" class="form-control" id="ccemail" name="email" placeholder="example123@email.com">
@@ -163,7 +164,7 @@
                             <label for="ccpassword" class="control-label">Password</label>
                             <input type="password" class="form-control" id="ccpassword" name="password">
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="row mt-2">
                         <div class="col">

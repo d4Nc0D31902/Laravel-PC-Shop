@@ -94,7 +94,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="proform" method="PUT" action="#" enctype="multipart/form-data">
+                <form id="proform" method="PUT" role="form" enctype="multipart/form-data">
                     <input type="hidden" class="form-control" id="ppproduct_id" name="product_id">
                     <div class="form-group">
                         <label for="ppname" class="control-label">Name</label>

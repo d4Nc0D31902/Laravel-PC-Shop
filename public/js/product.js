@@ -128,9 +128,7 @@ $("#ptable tbody").on("click", "a.editBtn", function (e) {
         $.ajax({    
             type: "PUT",
             url: "api/product/"+ id,
-            // url: `api/product/${id}`,
             data: data,
-
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             dataType: "json",
             success: function(data) {
@@ -139,6 +137,7 @@ $("#ptable tbody").on("click", "a.editBtn", function (e) {
                 //         $(this).modal('hide'); });
 
                 $('#editProductModal').modal("hide");
+                // window.location.reload();
                 table.row(cRow).data(data).invalidate().draw(false);
             },
             error: function(error) {

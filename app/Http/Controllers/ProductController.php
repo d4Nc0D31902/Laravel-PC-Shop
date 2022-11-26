@@ -98,10 +98,13 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->brand = $request->brand;
         $product->type = $request->type;
-        $product->save();
+        // $files = $request->file('uploads');
+        // $product->imagePath = 'images/'.$files->getClientOriginalName();
+        $product->update();
+        // Storage::put('/public/images/'.$files->getClientOriginalName(),file_get_contents($files));
 
         // return response()->json($product);
-        return response()->json(["success" => "Product updated successfully.","product" => $product ,"status" => 200]);
+        return response()->json($product);
     }
 
     /**
