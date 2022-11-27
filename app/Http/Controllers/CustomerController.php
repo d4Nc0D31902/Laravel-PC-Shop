@@ -140,11 +140,11 @@ class CustomerController extends Controller
         $customer->zipcode = $request->zipcode;
         $customer->town = $request->town;
         $customer->phone = $request->phone;
-        // $files = $request->hasFile('uploads');
-        // $customer->imagePath = 'images/'.$files->getClientOriginalName();
-        $customer->save();
-        // Storage::put('/public/images/'.$files->getClientOriginalName(),file_get_contents($files));   
-
+        $files = $request->file('uploads');
+        $customer->imagePath = 'images/'.$files->getClientOriginalName();
+        $customer->update();
+        Storage::put('/public/images/'.$files->getClientOriginalName(),file_get_contents($files));   
+        // $customer = Customer::find($id);
         return response()->json($customer);
     }
 

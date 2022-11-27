@@ -31,4 +31,7 @@ class Customer extends Model
         return $this->belongsTo('App\Models\User');
     }
 
+    public function pcspecs() {
+        return $this->hasMany('App\Models\Pcspec', 'customer_id');
+    }
 }

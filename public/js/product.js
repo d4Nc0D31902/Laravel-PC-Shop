@@ -105,7 +105,7 @@ $("#ptable tbody").on("click", "a.editBtn", function (e) {
                $("#pptype").val(data.type);
                $("#ppbrand").val(data.brand);
                $("#ppprice").val(data.price);
-               $("#ppimagePath").val(data.imagePath);
+            //    $("#ppimagePath").val(data.imagePath);
                //    .html(`<img src="storage/images/${data.uploads}" width="100" class="img-fluid img-thumbnail">`);
             },
             error: function(){
@@ -115,30 +115,58 @@ $("#ptable tbody").on("click", "a.editBtn", function (e) {
         });
     });//end edit fetch
     
+    // $("#updatebtnProduct").on('click', function(e) {
+    //     e.preventDefault();
+    //     var id = $('#ppproduct_id').val();
+    //     //var data = $("#updateItemform").serialize();
+    //     console.log(data);
+
+    //     var table = $('#ptable').DataTable();
+    //     var cRow = $("tr td:contains(" + id + ")").closest('tr');
+    //     var data = $("#proform").serialize();
+
+    //     $.ajax({    
+    //         type: "PUT",
+    //         url: "api/product/"+ id,
+    //         data: data,
+    //         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+    //         dataType: "json",
+    //         success: function(data) {
+    //             console.log(data);
+    //             // $('#editItemModal').each(function(){
+    //             //         $(this).modal('hide'); });
+
+    //             $('#editProductModal').modal("hide");
+    //             // window.location.reload();
+    //             table.row(cRow).data(data).invalidate().draw(false);
+    //         },
+    //         error: function(error) {
+    //             console.log(error);
+    //         }
+    //     });
+    // });
+
     $("#updatebtnProduct").on('click', function(e) {
         e.preventDefault();
         var id = $('#ppproduct_id').val();
-        //var data = $("#updateItemform").serialize();
+        var data = $('#proform')[0];
+        var formData = new FormData(data);
+        var table = $('#ptable').DataTable();
         console.log(data);
 
-        var table = $('#ptable').DataTable();
-        var cRow = $("tr td:contains(" + id + ")").closest('tr');
-        var data = $("#proform").serialize();
-
         $.ajax({    
-            type: "PUT",
-            url: "api/product/"+ id,
-            data: data,
+            type: "POST",
+            url: "api/product/update/"+ id,
+            data: formData,
+            contentType: false,
+            processData: false,
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             dataType: "json",
             success: function(data) {
                 console.log(data);
-                // $('#editItemModal').each(function(){
-                //         $(this).modal('hide'); });
-
                 $('#editProductModal').modal("hide");
-                // window.location.reload();
-                table.row(cRow).data(data).invalidate().draw(false);
+                window.location.reload();
+                // table.row(cRow).data(data).invalidate().draw(false);
             },
             error: function(error) {
                 console.log(error);
@@ -146,6 +174,7 @@ $("#ptable tbody").on("click", "a.editBtn", function (e) {
         });
     });
 
+        
     $("#ptable tbody").on("click", "a.deletebtn", function (e) {
         var table = $('#ptable').DataTable();
         var id = $(this).data('id');

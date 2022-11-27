@@ -215,26 +215,33 @@ $("#ctable tbody").on("click", "a.editBtn", function (e) {
     
     $("#updatebtnCustomer").on('click', function(e) {
         e.preventDefault();
+        // var id = $('#cccustomer_id').val();
+        // //var data = $("#updateItemform").serialize();
+        // console.log(data);
+
+        // var table =$('#ctable').DataTable();
+        // var cRow = $("tr td:contains(" + id + ")").closest('tr');
+        // var data =$("#cusform").serialize();
+
         var id = $('#cccustomer_id').val();
-        //var data = $("#updateItemform").serialize();
+        var data = $('#cusform')[0];
+        var formData = new FormData(data);
+        var table = $('#ctable').DataTable();
         console.log(data);
 
-        var table =$('#ctable').DataTable();
-        var cRow = $("tr td:contains(" + id + ")").closest('tr');
-        var data =$("#cusform").serialize();
-
         $.ajax({
-            type: "PUT",
-            url: "api/customer/"+ id,
-            // url: `api/customer/${id}`,
-            data: data,
+            type: "POST",
+            url: "api/customer/update/"+ id,
+            data: formData,
+            contentType: false,
+            processData: false,
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             dataType: "json",
             success: function(data) {
                 console.log(data);
                 $('#editCustomerModal').modal("hide");
-                table.row(cRow).data(data).invalidate().draw(false);
-                // window.location.reload();
+                // table.row(cRow).data(data).invalidate().draw(false);
+                window.location.reload();
             },
             error: function(error) {
                 console.log(error);

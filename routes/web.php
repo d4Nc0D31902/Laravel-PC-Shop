@@ -22,3 +22,6 @@ Route::view('/customer', 'customer.index');
 
 Route::resource('product', 'ProductController');
 Route::view('/product', 'product.index');
+
+Route::resource('pcspec', 'PcspecController');
+Route::view('/pcspec', 'pcspec.index');

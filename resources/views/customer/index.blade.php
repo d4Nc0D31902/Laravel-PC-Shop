@@ -114,7 +114,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="cusform" method="PUT" action="#" enctype="multipart/form-data">
+                <form id="cusform" method="POST" action="#" enctype="multipart/form-data">
                     {{-- <input type="hidden"> --}}
                     <label for="cccustomer_id" class="control-label">Customer ID</label>
                     <input type="text" class="form-control" id="cccustomer_id" name="customer_id" readonly>

@@ -98,11 +98,12 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->brand = $request->brand;
         $product->type = $request->type;
-        // $files = $request->file('uploads');
-        // $product->imagePath = 'images/'.$files->getClientOriginalName();
+        // $files = null;
+        $files = $request->file('uploads');
+        $product->imagePath = 'images/'.$files->getClientOriginalName();
         $product->update();
-        // Storage::put('/public/images/'.$files->getClientOriginalName(),file_get_contents($files));
-
+        Storage::put('/public/images/'.$files->getClientOriginalName(),file_get_contents($files));
+        
         // return response()->json($product);
         return response()->json($product);
     }

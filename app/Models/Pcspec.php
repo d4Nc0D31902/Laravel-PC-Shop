@@ -26,4 +26,8 @@ class Pcspec extends Model
         'pc_case',
         'imagePath',
     ];
+
+    public function customers(){
+        return $this->belongsTo('App\Models\Customer');
+    }
 }

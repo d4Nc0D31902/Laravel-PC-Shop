@@ -94,14 +94,14 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="proform" method="PUT" role="form" enctype="multipart/form-data">
+                <form id="proform" method="POST" enctype="multipart/form-data">
                     <input type="hidden" class="form-control" id="ppproduct_id" name="product_id">
                     <div class="form-group">
-                        <label for="ppname" class="control-label">Name</label>
+                        <label for="ppname" class="control-label"> Name</label>
                         <input type="text" class="form-control" id="ppname" name="name">
                     </div>
                     <div class="form-group">
-                        <label for="ppdescription" class="control-label">Description</label>
+                        <label for="ppdescription" class="control-label"> Description</label>
                         <input type="text" class="form-control" id="ppdescription" name="description">
                     </div>
                     
@@ -124,14 +124,12 @@
                         <label for="eeimagePath" class="control-label"><i class="fa-regular fa-image"></i>  Image</label>
                         <input type="file" class="form-control" id="eeimagePath" name="imagePath" >
                     </div> --}}
-    
+                    
                     <div class="form-group">
                         <label for="ppimagePath" class="control-label"><i class="fa-regular fa-image"></i>  Image</label>
                         <input type="file" class="form-control" id="ppimagePath" name="uploads" >
                     </div>
     
-                    
-                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-bs-dismiss="modal"><i class="fa-sharp fa-solid fa-circle-xmark"></i> Close</button>
