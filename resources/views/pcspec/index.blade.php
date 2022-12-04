@@ -2,91 +2,112 @@
 @section('body')
 <div class="container">
     <div class="table-responsive">
-        <table id="ctable" class="table table-striped table-hover">
+        <table id="pctable" class="table table-striped table-hover">
             <thead>
                 <tr>
+                    <th>Pc-spec I.D</th>
                     <th>Customer I.D</th>
-                    <th>Title</th>
-                    <th>Last name</th>
-                    <th>First name</th>
-                    <th>Address</th>
-                    <th>Zipcode</th>
-                    <th>Town</th>
-                    <th>Phone</th>
+                    <th>Cpu</th>
+                    <th>Motherboard</th>
+                    <th>Gpu</th>
+                    <th>Ram</th>
+                    <th>Hdd</th>
+                    <th>Sdd</th>
+                    <th>Psu</th>
+                    <th>PC Case</th>
                     <th>Image</th>
                     <th>Edit</th>
                     <th>Delete</th>
                     <th>Restore</th>
                 </tr>
             </thead>
-            <tbody id="cbody">
+            <tbody id="pcbody">
             </tbody>
         </table>
     </div>
 </div>
 
 {{-- start of create --}}
-<div class="modal fade" id="customerModal" role="dialog" style="display:none">
+<div class="modal fade" id="pcCreateModal" role="dialog" style="display:none">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Create New Customer</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Create New PC Spec</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="alert alert-danger" style="display:none"></div>
             <div class="modal-body">
                 <form id="cform" method="post" action="#" enctype="multipart/form-data">
-                    <div class="row">
+                    
+                    {{-- <div class="row">
                         <div class="col">
-                            <label for="clname" class="control-label">Title</label>
-                            <input type="text" class="form-control" placeholder="Mr." aria-label="Title" id="ctitle" name="title">
+                            <label for="caddressline" class="control-label">Owner Name/Id</label>
+                            <input type="text" class="form-control" placeholder="Juan Dela Cruz 1..." aria-label="Addressline" id="caddressline" name="addressline">
+                        </div>
+                    </div> --}}
+                    
+                    <div class="col-md-4 mb-3">
+                        <label for="customer_id">Owner Name</label>
+                        <select class="form-control" id="customer_id" name="customer_id" required="">
+                          {{-- @foreach($customers as $id => $customer)
+                            <option value="{{$id}}"><a> {{$customer}} </a></option>
+                          @endforeach --}}
+                        </select>
+                      </div>
+                      
+                    {{-- <div class="col-md-4 mb-3">
+                    <label for="customer_id">Owner Name</label>
+                    <select class="form-control" id="customer_id" name="customer_id" required="">
+                        @foreach($customers as $id => $customer)
+                        <option value="{{$id}}"><a> {{$customer}} </a></option>
+                        @endforeach
+                    </select>
+                    </div> --}}
+
+                    <div class="row mt-2">
+                        <div class="col">
+                            <label for="pccpu" class="control-label">Processor (CPU)</label>
+                            <input type="text" class="form-control" placeholder="Intel i3-10100f..." id="pccpu" name="cpu">
                         </div>
                         <div class="col">
-                            <label for="clname" class="control-label">First name</label>
-                            <input type="text" class="form-control" placeholder="Juan" aria-label="First name" id="cfname" name="fname">
+                            <label for="pcmotherboard" class="control-label">Motherboard</label>
+                            <input type="text" class="form-control" placeholder="MSI Z790 Edge... " id="pcmotherboard" name="motherboard">
                         </div>
                         <div class="col">
-                            <label for="clname" class="control-label">Last name</label>
-                            <input type="text" class="form-control" placeholder="Dela Cruz" aria-label="Last name" id="clname" name="lname">
+                            <label for="pcgpu" class="control-label">Graphic Card (GPU)</label>
+                            <input type="text" class="form-control" placeholder="GTX 1060ti..." id="pcgpu" name="gpu">
                         </div>  
                     </div>
 
                     <div class="row mt-2">
                         <div class="col">
-                            <label for="caddressline" class="control-label">Addressline</label>
-                            <input type="text" class="form-control" placeholder="Lot 24A Block 52 New Lower..." aria-label="Addressline" id="caddressline" name="addressline">
-                        </div>
-                    </div>
-
-                    <div class="row mt-2">
-                        <div class="col">
-                            <label for="ctown" class="control-label">Town</label>
-                            <input type="text" class="form-control" placeholder="Taguig City..." aria-label="Town" id="ctown" name="town">
+                            <label for="pcram" class="control-label">Ram</label>
+                            <input type="text" class="form-control" placeholder="Kingston 16gb 2666mhz..." id="pcram" name="ram">
                         </div>
                         <div class="col">
-                            <label for="czipcode" class="control-label">Zipcode</label>
-                            <input type="text" class="form-control" placeholder="1918" aria-label="Zipcode" id="czipcode" name="zipcode">
+                            <label for="pchdd" class="control-label">HDD</label>
+                            <input type="text" class="form-control" placeholder="Seagate 2TB Skyhawk..." id="pchdd" name="hdd">
                         </div>
                         <div class="col">
-                            <label for="cphone" class="control-label">Phone</label>
-                            <input type="text" class="form-control" placeholder="092187162..." aria-label="Phone" id="cphone" name="phone">
+                            <label for="pcsdd" class="control-label">SDD</label>
+                            <input type="text" class="form-control" placeholder="Gigabyte 2TB..." id="pcsdd" name="sdd">
                         </div>  
                     </div>
 
                     <div class="row mt-2">
                         <div class="col">
-                            <label for="cemail" class="control-label">Email</label>
-                            <input type="email" class="form-control" id="cemail" name="email" placeholder="example123@email.com">
+                            <label for="pcpsu" class="control-label">Powersupply (PSU)</label>
+                            <input type="text" class="form-control" id="pcpsu" name="psu" placeholder="Corsair CV Series CV550 - 80 Plus Bronze...">
                         </div>
                         <div class="col">
-                            <label for="cpassword" class="control-label">Password</label>
-                            <input type="password" class="form-control" id="cpassword" name="password">
+                            <label for="pcpc_case" class="control-label">PC Case</label>
+                            <input type="text" class="form-control" placeholder="Asus TUF Gaming GT501 White Edition..." id="pcpc_case" name="pc_case">
                         </div>
                     </div>
 
                     <div class="row mt-2">
                         <div class="col">
-                            <label for="imagePath" class="control-label">Profile Picture</label>
+                            <label for="imagePath" class="control-label">PC Picture</label>
                             <div class="input-group">
                                 <input type="file" class="form-control" id="imagePath" name="uploads">
                                 <label class="input-group-text" for="inputGroupFile02">Upload</label>
@@ -107,7 +128,7 @@
 
 {{-- start of edit --}}
 <div class="modal fade" id="editCustomerModal" role="dialog" style="display:none">
-    <div class="modal-dialogee">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Edit Customer</h5>
@@ -115,7 +136,6 @@
             </div>
             <div class="modal-body">
                 <form id="cusform" method="POST" action="#" enctype="multipart/form-data">
-                    {{-- <input type="hidden"> --}}
                     <label for="cccustomer_id" class="control-label">Customer ID</label>
                     <input type="text" class="form-control" id="cccustomer_id" name="customer_id" readonly>
                     <div class="row mt-2">
@@ -155,17 +175,6 @@
                         </div>  
                     </div>
 
-                    {{-- <div class="row mt-2">
-                        <div class="col">
-                            <label for="ccemail" class="control-label">Email</label>
-                            <input type="email" class="form-control" id="ccemail" name="email" placeholder="example123@email.com">
-                        </div>
-                        <div class="col">
-                            <label for="ccpassword" class="control-label">Password</label>
-                            <input type="password" class="form-control" id="ccpassword" name="password">
-                        </div>
-                    </div> --}}
-
                     <div class="row mt-2">
                         <div class="col">
                             <label for="ccimagePath" class="control-label">Profile Picture</label>
@@ -175,7 +184,8 @@
                               </div>
                         </div>
                     </div>
-    
+
+                    
                     
                 
             </div>

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->text('sdd');
             $table->text('psu');
             $table->text('pc_case');
+            $table->text('imagePath')->default('images/default-pc.jpg');
             $table->timestamps();
             $table->softDeletes();
         });

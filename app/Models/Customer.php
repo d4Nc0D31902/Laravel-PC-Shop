@@ -12,7 +12,7 @@ class Customer extends Model
 
     public $table = 'customers';
     public $primaryKey = 'customer_id';
-    protected $guarded = ['customer_id', 'imagePath'];
+    protected $guarded = ['customer_id'];
     // public $timestamps = false;
     
     protected $fillable = [

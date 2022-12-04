@@ -17,15 +17,16 @@ return new class extends Migration
             $table->increments('employee_id');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('title');
-            $table->string('fname');
-            $table->string('lname');
-            $table->string('addressline');
-            $table->string('town');
-            $table->string('zipcode');
-            $table->string('phone');
-            $table->string('imageaPath')->default('images/employee.jpg');;
+            $table->text('title');
+            $table->text('lname');
+            $table->text('fname');
+            $table->text('addressline');
+            $table->text('town');
+            $table->text('zipcode');
+            $table->text('phone');
+            $table->text('imagePath')->default('images/employee.jpg');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

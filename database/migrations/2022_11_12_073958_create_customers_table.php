@@ -24,7 +24,7 @@ return new class extends Migration
             $table->text('town');
             $table->text('zipcode');
             $table->text('phone');
-            $table->text('imagePath')->default('images/customer.jpg');;
+            $table->text('imagePath')->default('images/customer.jpg');
             $table->timestamps();
             $table->softDeletes();
         });

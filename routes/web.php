@@ -20,8 +20,12 @@ Route::get('/', function () {
 Route::resource('customer', 'CustomerController');
 Route::view('/customer', 'customer.index');
 
+Route::resource('employee', 'EmployeeController');
+Route::view('/employee', 'employee.index');
+
 Route::resource('product', 'ProductController');
 Route::view('/product', 'product.index');
 
 Route::resource('pcspec', 'PcspecController');
 Route::view('/pcspec', 'pcspec.index');
+

@@ -12,7 +12,7 @@ class Pcspec extends Model
 
     public $table = 'pcspecs';
     public $primaryKey = 'pc_id';
-    protected $guarded = ['pc_id', 'imagePath'];
+    protected $guarded = ['pc_id'];
     
     protected $fillable = [
         'customer_id',

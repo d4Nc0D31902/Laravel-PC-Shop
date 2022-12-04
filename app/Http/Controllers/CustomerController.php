@@ -10,6 +10,7 @@ use Storage;
 use File;
 use DB;
 use Log;
+use Validator;
 
 class CustomerController extends Controller
 {
@@ -30,6 +31,7 @@ class CustomerController extends Controller
         {
             $customers = Customer::with('users')->orderBy('customer_id','DESC')->get();
             return response()->json($customers);
+            // return response()->json(['customer'])
         }
     }
 
