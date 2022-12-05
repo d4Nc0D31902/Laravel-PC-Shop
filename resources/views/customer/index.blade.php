@@ -107,7 +107,7 @@
 
 {{-- start of edit --}}
 <div class="modal fade" id="editCustomerModal" role="dialog" style="display:none">
-    <div class="modal-dialogee">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Edit Customer</h5>
@@ -155,7 +155,7 @@
                         </div>  
                     </div>
 
-                    {{-- <div class="row mt-2">
+                    <div class="row mt-2">
                         <div class="col">
                             <label for="ccemail" class="control-label">Email</label>
                             <input type="email" class="form-control" id="ccemail" name="email" placeholder="example123@email.com">
@@ -164,7 +164,7 @@
                             <label for="ccpassword" class="control-label">Password</label>
                             <input type="password" class="form-control" id="ccpassword" name="password">
                         </div>
-                    </div> --}}
+                    </div>
 
                     <div class="row mt-2">
                         <div class="col">
@@ -189,5 +189,6 @@
     </div>
     </form>
     {{-- end of edit --}}
-
+    
+    
 @endsection

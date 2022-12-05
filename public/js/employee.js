@@ -114,6 +114,7 @@ $("#emtable tbody").on("click", "a.editBtn", function (e) {
                $("#eetown").val(data.town);
                $("#eezipcode").val(data.zipcode);
                $("#eephone").val(data.phone);
+               $("#eeemail").val(data.email);
             },
             error: function(){
                 console.log('AJAX load did not work');

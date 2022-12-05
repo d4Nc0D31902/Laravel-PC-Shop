@@ -155,16 +155,16 @@
                         </div>  
                     </div>
 
-                    {{-- <div class="row mt-2">
+                    <div class="row mt-2">
                         <div class="col">
-                            <label for="ccemail" class="control-label">Email</label>
-                            <input type="email" class="form-control" id="ccemail" name="email" placeholder="example123@email.com">
+                            <label for="eeemail" class="control-label">Email</label>
+                            <input type="email" class="form-control" id="eeemail" name="email" placeholder="example123@email.com">
                         </div>
                         <div class="col">
-                            <label for="ccpassword" class="control-label">Password</label>
-                            <input type="password" class="form-control" id="ccpassword" name="password">
+                            <label for="eepassword" class="control-label">Password</label>
+                            <input type="password" class="form-control" id="eepassword" name="password">
                         </div>
-                    </div> --}}
+                    </div>
 
                     <div class="row mt-2">
                         <div class="col">

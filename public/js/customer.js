@@ -204,8 +204,9 @@ $("#ctable tbody").on("click", "a.editBtn", function (e) {
                $("#cctown").val(data.town);
                $("#cczipcode").val(data.zipcode);
                $("#ccphone").val(data.phone);
-            //    $("#ccemail").val(data.email);
+               $("#ccemail").val(data.email);
             },
+            
             error: function(){
                 console.log('AJAX load did not work');
                 alert("error");

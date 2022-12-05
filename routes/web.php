@@ -29,3 +29,8 @@ Route::view('/product', 'product.index');
 Route::resource('pcspec', 'PcspecController');
 Route::view('/pcspec', 'pcspec.index');
 
+
+Route::get('login', [
+    'uses' => 'LoginController@index',
+    'as' => 'login.index',
+  ]);

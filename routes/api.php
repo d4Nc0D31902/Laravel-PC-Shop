@@ -38,3 +38,13 @@ Route::get('/pcspec/all', ['uses' => 'PcspecController@getPcspecAll', 'as' => 'p
 Route::resource('pcspec', 'PcspecController');
 Route::post('/pcspec/update/{id}',['uses' => 'PcspecController@update','as' => 'pcspec.update']);
 
+Route::post('login', [
+    'uses' => 'LoginController@postSignin',
+    'as' => 'login.signin',
+  ]);
+
+  Route::get('logout',[
+    'uses' => 'LoginController@logout',
+    'as' => 'login.logout',
+    'middleware'=>'auth'
+   ]);

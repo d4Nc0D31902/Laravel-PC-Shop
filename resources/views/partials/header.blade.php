@@ -28,7 +28,7 @@
             <a class="nav-link" href="http://localhost:8000/pcspec">PcSpec</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="http://localhost:8000/product">Products</a>
+            <a class="nav-link" href="{{ url('/product') }}">Products</a>
           </li>
           {{-- <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="dropdown09" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>
@@ -39,6 +39,11 @@
             </ul>
           </li> --}}
         </ul>
+      @if(Auth::check()) 
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('login.logout') }}">Logout</a>
+      </li>
+      @else 
        <div>
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item dropdown">
@@ -49,10 +54,11 @@
               </ul>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Login</a>
+                <a class="nav-link" href="{{ route('login.index') }}">Login</a>
               </li>
           </ul>
        </div>
+       @endif
       </div>
     </div>
   </nav>

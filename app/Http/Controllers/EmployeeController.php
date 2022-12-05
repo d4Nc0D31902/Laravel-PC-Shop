@@ -102,7 +102,10 @@ class EmployeeController extends Controller
      */
     public function edit($id)
     {
-        $employee = Employee::with('users')->find($id);
+        // $employee = Employee::with('users')->find($id);
+        $employee = DB::table('employees')
+        ->join('users', 'users.id', '=', 'employees.user_id')
+        ->first();
         return response()->json($employee);
     }
 

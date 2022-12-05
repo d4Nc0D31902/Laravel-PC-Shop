@@ -121,7 +121,11 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-        $customer = Customer::with('users')->find($id);
+        // $customer = Customer::with('users')->find($id);
+        // $customer = Customer::with('users')->where('customer_id',$id)->first();
+        $customer = DB::table('customers')
+        ->join('users', 'users.id', '=', 'customers.user_id')
+        ->first();
         return response()->json($customer);
     }
 
