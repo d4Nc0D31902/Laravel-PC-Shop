@@ -107,7 +107,7 @@
 {{-- end of create --}}
 
 {{-- start of edit --}}
-<div class="modal fade" id="editCustomerModal" role="dialog" style="display:none">
+{{-- <div class="modal fade" id="editCustomerModal" role="dialog" style="display:none">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -117,7 +117,6 @@
             <div class="modal-body">
                 <form id="cusform" method="POST" action="#" enctype="multipart/form-data">
                     <meta name="csrf-token" content="{{ csrf_token() }}" />
-                    {{-- <input type="hidden"> --}}
                     <label for="cccustomer_id" class="control-label">Customer ID</label>
                     <input type="text" class="form-control" id="cccustomer_id" name="customer_id" readonly>
                     <div class="row mt-2">
@@ -189,7 +188,7 @@
         </div>
     </div>
     </div>
-    </form>
+    </form> --}}
     {{-- end of edit --}}
     
     

@@ -1,5 +1,6 @@
 @extends('layouts.base')
 @section('body')
+
 <div class="container">
     <div class="table-responsive">
         <table id="emtable" class="table table-striped table-hover">
@@ -106,7 +107,7 @@
 {{-- end of create --}}
 
 {{-- start of edit --}}
-<div class="modal fade" id="editEmployeeModal" role="dialog" style="display:none">
+{{-- <div class="modal fade" id="editEmployeeModal" role="dialog" style="display:none">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -115,7 +116,7 @@
             </div>
             <div class="modal-body">
                 <form id="empform" method="POST" action="#" enctype="multipart/form-data">
-                    {{-- <input type="hidden"> --}}
+                    {{ csrf_field() }}
                     <label for="eeemployee_id" class="control-label">Employee ID</label>
                     <input type="text" class="form-control" id="eeemployee_id" name="employee_id" readonly>
                     <div class="row mt-2">
@@ -187,7 +188,7 @@
         </div>
     </div>
     </div>
-    </form>
+    </form> --}}
     {{-- end of edit --}}
 
 @endsection

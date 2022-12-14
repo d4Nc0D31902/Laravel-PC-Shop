@@ -86,22 +86,30 @@ class UserController extends Controller
         //
     }
     
-    public function profile()
+    public function getProfile()
     {
         return View::make('profile.customer');
     }
 
-    public function getProfile()
-    {
-        if(Auth::check()){
-            if(Auth::user()->user === "admin") {
+    public function profile(Request $request)
+    {   
+        if ($request->ajax()){
+            if(Auth::check()){
+                if(Auth::user()->user === "admin") {
 
-            } elseif(Auth::user()->user === "employee") {
-            
-            } else {
-                $customer = Customer::where('user_id',Auth::id())->first();
-                return response()->json($customer);
-                // return response()->json(["success" => "Successfully login!"]);
+                } elseif(Auth::user()->user === "employee") {
+                
+                } else {
+                    // $customer = Customer::where('user_id',Auth::user()->)->first();
+                    $id = Auth::user()->customers->customer_id;
+
+                    $customer = DB::table('customers')
+                    ->join('users', 'users.id', '=', 'customers.user_id')
+                    ->where('customers.customer_id', '=', $id)
+                    ->first();
+                    return response()->json($customer);
+                    // return response()->json(["success" => "Successfully login!"]);
+                }
             }
         }
     }

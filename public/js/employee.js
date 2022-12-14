@@ -92,7 +92,13 @@ $("#employeeSubmit").on("click", function (e) {
 });
 
 
-$("#emtable tbody").on("click", "a.editBtn", function (e) {
+$("#createEmployeeBtn").on("click", function (e) {
+    $('#employeeModal').modal('show');
+});  
+
+
+// $("#emtable tbody").on("click", "a.editBtn", function (e) {
+$("#editEmployeeBtn").on("click", function (e) {
     e.preventDefault();
     var id = $(this).data('id');
     $('#editEmployeeModal').modal('show');

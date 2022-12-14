@@ -43,9 +43,12 @@
       <div>
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="dropdown09" data-bs-toggle="dropdown" aria-expanded="false">{{ Auth::user()->name }}</a>
+            <a class="nav-link dropdown-toggle" href="#" id="dropdown09" data-bs-toggle="dropdown" aria-expanded="false">
+              {{-- <img src="{{ asset('/storage/' . Auth::user()->customers->imagePath) }}" alt="avatar"
+              class="rounded-circle img-fluid" style="width: 20px;">   --}}
+              {{ Auth::user()->name }}</a>
               <ul class="dropdown-menu" aria-labelledby="dropdown09">
-                <li><a class="dropdown-item" href="{{ route('profile.customer') }}" id="profileBtnClick">My Account</a></li>
+                <li><a class="dropdown-item" href="{{ url('/profile') }}">My Account</a></li>
             {{-- <a class="nav-link" href=""><img class="img-circle" src="{{ asset(Auth::user()->employees->imagePath) }}">Profile</a> --}}
               </ul>
           </li>

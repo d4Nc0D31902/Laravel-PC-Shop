@@ -1,33 +1,38 @@
 $(document).ready(function(){
+    // $.ajax({
+    //     type: "GET",
+    //     url: "/api/item",
+    //     dataType: 'json',
+    //     success: function (data) {
+    //         console.log(data);
+    //         $.each(data, function (key, value) {
+    //             // console.log(key);
+    //             id = value.item_id;
+    //             var item = "<div class='item'><div class='itemDetails'><div class='itemImage'><img src="+"/storage/" + value.imagePath + " width='200px', height='200px'/></div><div class='itemText'><p class='price-container'>Price: Php <span class='price'>" + value.sell_price + "</span></p><p>" + value.description + "</p></div><input type='number' class='qty' name='quantity' min='1' max='5'><p class='itemId'>" + value.item_id + "</p>      </div><button type='button' class='btn btn-primary add' >Add to cart</button></div>";
+    //             $("#items").append(item);
 
-    $("#profileBtnClick").on('click', function(e) {
-        e.preventDefault();
+    //         });
 
-        $.ajax({
-            type: "GET",
-            url: "/api/profile",
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+    //     },
+    //     error: function () {
+    //         console.log('AJAX load did not work');
+    //         alert("error");
+    //     }
+    // });
+
+    $.ajax({
+        type: "GET",
+        url: "/api/profile",
+        dataType: "json",
+        success: function(data){
+                console.log(data);
+                $("#cpname").val(data.customer_id);
             },
-            dataType: "json",
-            success: function(data){
-                   console.log(data);
-                   $("#cccustomer_id").val(data.customer_id);
-                   $("#cctitle").val(data.title);
-                   $("#ccname").val(data.lname);
-                   $("#ccfname").val(data.fname);
-                   $("#ccaddressline").val(data.addressline);
-                   $("#cctown").val(data.town);
-                   $("#cczipcode").val(data.zipcode);
-                   $("#ccphone").val(data.phone);
-                   $("#ccemail").val(data.email);
-                },
-                
-                error: function(){
-                    console.log('AJAX load did not work');
-                    alert("error");
-                }
-            });
+            
+            error: function(){
+                console.log('AJAX load did not work');
+                alert("error");
+            }
         });
 
 })// end of document

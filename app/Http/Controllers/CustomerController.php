@@ -119,13 +119,21 @@ class CustomerController extends Controller
      * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit()
     {
         // $customer = Customer::with('users')->find($id);
         // $customer = Customer::with('users')->where('customer_id',$id)->first();
+        
+        // $customer = DB::table('customers')
+        // ->join('users', 'users.id', '=', 'customers.user_id')
+        // ->first();
+        $id = Auth::user()->customers->customer_id;
+
         $customer = DB::table('customers')
         ->join('users', 'users.id', '=', 'customers.user_id')
+        ->where('customers.customer_id', '=', $id)
         ->first();
+        
         return response()->json($customer);
     }
 
@@ -146,11 +154,32 @@ class CustomerController extends Controller
         $customer->zipcode = $request->zipcode;
         $customer->town = $request->town;
         $customer->phone = $request->phone;
+
+        if($files = $request->hasFile('uploads')) {
         $files = $request->file('uploads');
         $customer->imagePath = 'images/'.$files->getClientOriginalName();
         $customer->update();
         Storage::put('/public/images/'.$files->getClientOriginalName(),file_get_contents($files));   
-        // $customer = Customer::find($id);
+        } else {
+            $customer->update();
+        }
+
+        $user = User::find($customer->user_id);
+        $user->name = $request->fname . ' ' . $request->lname;
+        if(!empty($request->input('email')) and !empty($request->input('password'))){
+            $user->email = $request->email;
+            $user->password = bcrypt($request->input('password'));
+            $user->update();
+        } elseif(!empty($request->input('email'))){
+            $user->email = $request->email;
+            $user->update();
+        } elseif(!empty($request->input('password'))){
+            $user->password = bcrypt($request->input('password'));
+            $user->update();
+        } else{
+
+        }
+
         return response()->json($customer);
     }
 

@@ -20,25 +20,36 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Customer
 Route::group(['middleware' => ['auth:sanctum']], function () {
-Route::resource('customer', 'CustomerController');
-Route::view('/customer-index', 'customer.index');
-Route::post('/customer/update/{id}',['uses' => 'CustomerController@update','as' => 'customer.update']);
+  Route::resource('customer', 'CustomerController');
+  Route::view('/customer-index', 'customer.index');
+  Route::post('/customer/update/{id}',['uses' => 'CustomerController@update','as' => 'customer.update']);
+
+  //Employee
+  Route::resource('employee', 'EmployeeController');
+  Route::view('/employee-index', 'employee.index');
+  Route::post('/employee/update/{id}',['uses' => 'EmployeeController@update','as' => 'employee.update']);
+
+  // Product
+  Route::resource('product', 'ProductController');
+  Route::post('/product/update/{id}',['uses' => 'ProductController@update','as' => 'product.update']);
+  Route::view('/product-index', 'product.index');
+
+  // Pcspecs
+  Route::get('/pcspec/all', ['uses' => 'PcspecController@getPcspecAll', 'as' => 'pcspec.getPcspecAll']);
+  Route::resource('pcspec', 'PcspecController');
+  Route::post('/pcspec/update/{id}',['uses' => 'PcspecController@update','as' => 'pcspec.update']);
 });
 
-//Employee
-Route::resource('employee', 'EmployeeController');
-Route::view('/employee-index', 'employee.index');
-Route::post('/employee/update/{id}',['uses' => 'EmployeeController@update','as' => 'employee.update']);
+// // middleware for customer
+// Route::group(['middleware' => ['auth:sanctum', 'role:customer,admin,employee']], function () {
+//   Route::resource('customer', 'CustomerController')->only(['edit','update']);
+//   Route::post('/customer/update/{id}',['uses' => 'CustomerController@update','as' => 'customer.update']);
+// });
 
-// Product
-Route::resource('product', 'ProductController');
-Route::post('/product/update/{id}',['uses' => 'ProductController@update','as' => 'product.update']);
-Route::view('/product-index', 'product.index');
-
-// Pcspecs
-Route::get('/pcspec/all', ['uses' => 'PcspecController@getPcspecAll', 'as' => 'pcspec.getPcspecAll']);
-Route::resource('pcspec', 'PcspecController');
-Route::post('/pcspec/update/{id}',['uses' => 'PcspecController@update','as' => 'pcspec.update']);
+// Route::group(['middleware' => 'guest'], function() {
+//   Route::resource('customer', 'CustomerController')->only(['store']);
+//   Route::resource('employee', 'EmployeeController')->only(['store']);
+// });
 
 
 Route::get('signin', [
@@ -56,12 +67,17 @@ Route::get('logout',[
   'as' => 'login.logout',
 ]);
 
-Route::get('/profile', [
-  'uses' => 'UserController@profile',
-  'as' => 'profile.customer',
-]);
+// Route::get('/profile', [
+//   'uses' => 'UserController@profile',
+//   'as' => 'profile.customer',
+// ]);
 
+Route::view('/profile', 'profile.customer');
 Route::get('/getProfile', [
   'uses' => 'UserController@getProfile',
-  'as' => 'profile.customer',
+  'as' => 'getProfile.customer',
 ]);
+
+// Route::resource('user', 'UserController');
+// Route::view('/profile', 'profile.customer');
+Auth::routes(['verify' => true]);

@@ -11,6 +11,7 @@ use File;
 use DB;
 use Log;
 use Validator;
+use Auth;
 
 class EmployeeController extends Controller
 {
@@ -103,9 +104,13 @@ class EmployeeController extends Controller
     public function edit($id)
     {
         // $employee = Employee::with('users')->find($id);
+        $id = Auth::user()->employees->employee_id;
+
         $employee = DB::table('employees')
         ->join('users', 'users.id', '=', 'employees.user_id')
+        ->where('employees.employee_id', '=', $id)
         ->first();
+
         return response()->json($employee);
     }
 
@@ -126,10 +131,32 @@ class EmployeeController extends Controller
         $employee->zipcode = $request->zipcode;
         $employee->town = $request->town;
         $employee->phone = $request->phone;
+
+        if($files = $request->hasFile('uploads')) {
         $files = $request->file('uploads');
         $employee->imagePath = 'images/'.$files->getClientOriginalName();
         $employee->update();
         Storage::put('/public/images/'.$files->getClientOriginalName(),file_get_contents($files));   
+        } else {
+            $employee->update();
+        }
+        
+        $user = User::find($employee->user_id);
+        $user->name = $request->fname . ' ' . $request->lname;
+        if(!empty($request->input('email')) and !empty($request->input('password'))){
+            $user->email = $request->email;
+            $user->password = bcrypt($request->input('password'));
+            $user->update();
+        } elseif(!empty($request->input('email'))){
+            $user->email = $request->email;
+            $user->update();
+        } elseif(!empty($request->input('password'))){
+            $user->password = bcrypt($request->input('password'));
+            $user->update();
+        } else{
+
+        }
+
         return response()->json($employee);
     } 
 

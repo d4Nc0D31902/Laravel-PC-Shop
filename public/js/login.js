@@ -25,6 +25,10 @@ $(document).ready(function(){
                 console.log(data);
                 // table.row(cRow).data(data).invalidate().draw(false);
                 bootbox.alert(data.success)
+                setTimeout(function(){
+                    window.location.href = "/profile";
+                 }, 1000);
+                // window.location.href = "/profile";
                 // window.location.reload();
             },
             error: function(error) {
@@ -56,8 +60,9 @@ $(document).ready(function(){
                 // table.row(cRow).data(data).invalidate().draw(false);
                 bootbox.alert(data.success);
                 setTimeout(function(){
-                    window.location.reload(1);
-                 }, 3000);
+                    window.location.href = "/signin";
+                 }, 1000);
+                
             },
             error: function(error) {
                 console.log(error);

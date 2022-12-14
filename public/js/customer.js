@@ -81,6 +81,9 @@ $(document).ready(function () {
     $('#ctable').DataTable({
         ajax:{
             url:"/api/customer",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             dataSrc: ""
         },
         dom:'Bfrtip',
@@ -134,6 +137,10 @@ $(document).ready(function () {
 // }); //end of document
 
 
+$("#customerCreateBtn").on("click", function (e) {
+    $('#customerModal').modal('show');
+});  
+
 $("#customerSubmit").on("click", function (e) {
     e.preventDefault();
     // var data = $("#iform").serialize();
@@ -182,8 +189,7 @@ $("#customerSubmit").on("click", function (e) {
     })
 });
 
-
-$("#ctable tbody").on("click", "a.editBtn", function (e) {
+$("#editCustomerBtn").on("click", function (e) {
     e.preventDefault();
     var id = $(this).data('id');
     $('#editCustomerModal').modal('show');
