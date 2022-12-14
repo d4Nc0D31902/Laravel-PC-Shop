@@ -2,7 +2,7 @@
 @section('body')
 
 @if(Auth::check())
-  <p>You are now Login</p>
+  <p>You are now Logged in</p>
 @else
   <p>Please login your account</p>
 @endif
@@ -19,7 +19,7 @@
               </div>
               <div class="col-md-6 col-lg-7 d-flex align-items-center">
                 <div class="card-body p-4 p-lg-5 text-black">
-  
+                  <meta name="csrf-token" content="{{ csrf_token() }}" />
                   <form id="loginForm" action="" method="POST">
                     <div class="d-flex align-items-center mb-3 pb-1">
                       <i class="fa fa-american-sign-language-interpreting fa-2x me-3" style="color: #8800ff;"></i>

@@ -12,20 +12,25 @@ $(document).ready(function(){
 
         $.ajax({
             type: "POST",
-            url: "api/login",
+            url: "api/signin",
             data: formData,
             contentType: false,
             processData: false,
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), },
             dataType: "json",
+            accepts: {
+                json: 'application/json'
+            },
             success: function(data) {
                 console.log(data);
                 // table.row(cRow).data(data).invalidate().draw(false);
                 bootbox.alert(data.success)
-                window.location.reload();
+                // window.location.reload();
             },
             error: function(error) {
                 console.log(error);
+                bootbox.alert(error)
+
             }
         });
     });//end update
@@ -39,8 +44,8 @@ $(document).ready(function(){
         console.log(data);
 
         $.ajax({
-            type: "POST",
-            url: "api/login",
+            type: "GET",
+            url: "api/logout",
             data: formData,
             contentType: false,
             processData: false,
@@ -50,7 +55,9 @@ $(document).ready(function(){
                 console.log(data);
                 // table.row(cRow).data(data).invalidate().draw(false);
                 bootbox.alert(data.success);
-                window.location.reload();
+                setTimeout(function(){
+                    window.location.reload(1);
+                 }, 3000);
             },
             error: function(error) {
                 console.log(error);

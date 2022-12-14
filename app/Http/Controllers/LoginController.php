@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 use Auth;
 use Session;
 use View;
@@ -10,10 +11,11 @@ use View;
 class LoginController extends Controller
 {   
     public function index(){
-        return View::make('login.index');
+        return View::make('user.signin');
     }
 
     public function postSignin(Request $request){
+        
         $this->validate($request, [
             'email' => 'email| required',
             'password' => 'required| min:4'
@@ -21,27 +23,29 @@ class LoginController extends Controller
 
         if(auth()->attempt(array('email' => $request->email, 'password' => $request->password))) {
 
+            $user = User::where('email', $request->email)->first();
+            // $user = Auth::user();
+            $authToken = $user->createToken('auth-token')->plainTextToken;
+
             if (auth()->user()->role === 'employee') {
-                // return redirect()->route('dashboard.index');
-                // return redirect()->route('user.employee');
-                return response()->json(["success" => "Employee Login Successfully!","status" => 200]);
-            } else if (auth()->user()->role === 'admin'){
-            //  return redirect()->route('getEmployees');
-            return response()->json(["success" => "Admin Login Successfully!","status" => 200]);
+                return response()->json(['access_token' => $authToken, "success" => "Employee Login Successfully!","status" => 200 ]);
+            } 
+            else if (auth()->user()->role === 'admin'){
+                return response()->json(['access_token' => $authToken, "success" => "Employee Login Successfully!","status" => 200 ]);
             }  
             else {
-                // return redirect()->route('shop.index');
-                 return response()->json(["success" => "Customer Login Successfully!","status" => 200]);
+                return response()->json(['access_token' => $authToken, "success" => "Customer Login Successfully!","status" => 200]);
             }
         }
         else{
             // return redirect()->route('user.signin')->with('error','Email-Address And Password Are Wrong.');
+            return response()->json(["error" => "Email-Address And Password Are Wrong."]);
         }
      }
      
      public function logout(){
         Auth::logout();
-        // return redirect()->guest('/');
-        return redirect()->route('user.signin');
+        return response()->json(["success" => "User Logout Successfully!"]);
     }
+    
 }

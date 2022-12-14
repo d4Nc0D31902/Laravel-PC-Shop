@@ -17,20 +17,44 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('customer', 'CustomerController');
-Route::view('/customer', 'customer.index');
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::resource('customer', 'CustomerController');
+    Route::view('/customer', 'customer.index');
 
-Route::resource('employee', 'EmployeeController');
-Route::view('/employee', 'employee.index');
+    Route::resource('employee', 'EmployeeController');
+    Route::view('/employee', 'employee.index');
 
-Route::resource('product', 'ProductController');
-Route::view('/product', 'product.index');
+    Route::resource('product', 'ProductController');
+    Route::view('/product', 'product.index');
 
-Route::resource('pcspec', 'PcspecController');
-Route::view('/pcspec', 'pcspec.index');
+    Route::resource('pcspec', 'PcspecController');
+    Route::view('/pcspec', 'pcspec.index');
+});
 
+// Route::group(['prefix' => 'user'], function() {
+//   Route::group(['middleware' => 'guest'], function() {
+//     Route::get('signin', [
+//         'uses' => 'LoginController@index',
+//         'as' => 'user.signin',
+//     ]);
+//   });
+// });
 
-Route::get('login', [
-    'uses' => 'LoginController@index',
-    'as' => 'login.index',
+Route::get('/profile', [
+    'uses' => 'UserController@profile',
+    'as' => 'profile.customer',
   ]);
+
+Route::get('/getProfile', [
+    'uses' => 'UserController@getProfile',
+    'as' => 'profile.customer',
+  ]);
+
+Route::get('signin', [
+          'uses' => 'LoginController@index',
+          'as' => 'user.signin',
+      ]);
+
+Auth::routes(['verify' => true]);
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

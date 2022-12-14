@@ -36,6 +36,7 @@
             <div class="alert alert-danger" style="display:none"></div>
             <div class="modal-body">
                 <form id="cform" method="post" action="#" enctype="multipart/form-data">
+                    <meta name="csrf-token" content="{{ csrf_token() }}" />
                     <div class="row">
                         <div class="col">
                             <label for="clname" class="control-label">Title</label>
@@ -115,6 +116,7 @@
             </div>
             <div class="modal-body">
                 <form id="cusform" method="POST" action="#" enctype="multipart/form-data">
+                    <meta name="csrf-token" content="{{ csrf_token() }}" />
                     {{-- <input type="hidden"> --}}
                     <label for="cccustomer_id" class="control-label">Customer ID</label>
                     <input type="text" class="form-control" id="cccustomer_id" name="customer_id" readonly>

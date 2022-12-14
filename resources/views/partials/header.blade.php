@@ -40,21 +40,25 @@
           </li> --}}
         </ul>
       @if(Auth::check()) 
-      <li class="nav-item">
-        <a class="nav-link" href="{{ route('login.logout') }}">Logout</a>
-      </li>
+      <div>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="dropdown09" data-bs-toggle="dropdown" aria-expanded="false">{{ Auth::user()->name }}</a>
+              <ul class="dropdown-menu" aria-labelledby="dropdown09">
+                <li><a class="dropdown-item" href="{{ route('profile.customer') }}" id="profileBtnClick">My Account</a></li>
+            {{-- <a class="nav-link" href=""><img class="img-circle" src="{{ asset(Auth::user()->employees->imagePath) }}">Profile</a> --}}
+              </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('login.logout') }}" id="logoutbtnSubmit">Logout</a>
+          </li>
+        </ul>
+      </div>
       @else 
        <div>
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="dropdown09" data-bs-toggle="dropdown" aria-expanded="false">Profile</a>
-              <ul class="dropdown-menu" aria-labelledby="dropdown09">
-                <li><a class="dropdown-item" href="#">My Account</a></li>
-                <li><a class="dropdown-item" href="#">Add Pc-spec</a></li>
-              </ul>
-            </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('login.index') }}">Login</a>
+                <a class="nav-link" href="{{ route('user.signin') }}">Login</a>
               </li>
           </ul>
        </div>

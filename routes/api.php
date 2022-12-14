@@ -19,9 +19,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Customer
+Route::group(['middleware' => ['auth:sanctum']], function () {
 Route::resource('customer', 'CustomerController');
 Route::view('/customer-index', 'customer.index');
 Route::post('/customer/update/{id}',['uses' => 'CustomerController@update','as' => 'customer.update']);
+});
 
 //Employee
 Route::resource('employee', 'EmployeeController');
@@ -38,13 +40,28 @@ Route::get('/pcspec/all', ['uses' => 'PcspecController@getPcspecAll', 'as' => 'p
 Route::resource('pcspec', 'PcspecController');
 Route::post('/pcspec/update/{id}',['uses' => 'PcspecController@update','as' => 'pcspec.update']);
 
-Route::post('login', [
-    'uses' => 'LoginController@postSignin',
-    'as' => 'login.signin',
-  ]);
 
-  Route::get('logout',[
-    'uses' => 'LoginController@logout',
-    'as' => 'login.logout',
-    'middleware'=>'auth'
-   ]);
+Route::get('signin', [
+  'uses' => 'LoginController@index',
+  'as' => 'user.signin',
+]);
+
+Route::post('signin', [
+    'uses' => 'LoginController@postSignin',
+    'as' => 'user.signin',
+]);
+
+Route::get('logout',[
+  'uses' => 'LoginController@logout',
+  'as' => 'login.logout',
+]);
+
+Route::get('/profile', [
+  'uses' => 'UserController@profile',
+  'as' => 'profile.customer',
+]);
+
+Route::get('/getProfile', [
+  'uses' => 'UserController@getProfile',
+  'as' => 'profile.customer',
+]);

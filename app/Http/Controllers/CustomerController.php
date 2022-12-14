@@ -11,7 +11,7 @@ use File;
 use DB;
 use Log;
 use Validator;
-
+use Auth;
 class CustomerController extends Controller
 {
     /**
@@ -98,7 +98,7 @@ class CustomerController extends Controller
         	$customer->save();
             Storage::put('/public/images/'.$files->getClientOriginalName(),file_get_contents($files));
         }
-
+        // Auth::login($user);
         return response()->json(["success" => "Customer created successfully.","customer" => $customer ,"status" => 200]);
     }
 
@@ -165,5 +165,10 @@ class CustomerController extends Controller
         $customers = Customer::findOrFail($id);
         $customers->delete();
         return response()->json(["success" => "Customer Deleted Successfully!","status" => 200]);
+    }
+
+    public function profile()
+    {
+        
     }
 }

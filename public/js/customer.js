@@ -154,7 +154,9 @@ $("#customerSubmit").on("click", function (e) {
         processData: false,
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
         dataType:"json", 
-
+        accepts: {
+            json: 'application/json'
+        },
         success:function(data){
             
             if (data.errors) {
@@ -163,7 +165,7 @@ $("#customerSubmit").on("click", function (e) {
                 // jQuery('.alert-danger').append('<p>'+value+'</p>');
                 // });
                 bootbox.alert({
-                    message: "Error please complete the form first!",
+                    message: data.errors,
                     className: 'rubberBand animated'});
             } else {
                 console.log(data);

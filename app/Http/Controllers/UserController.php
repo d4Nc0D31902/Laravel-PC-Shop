@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\Customer;
+use Auth;
+use View;
 
 class UserController extends Controller
 {
@@ -81,5 +84,25 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+    
+    public function profile()
+    {
+        return View::make('profile.customer');
+    }
+
+    public function getProfile()
+    {
+        if(Auth::check()){
+            if(Auth::user()->user === "admin") {
+
+            } elseif(Auth::user()->user === "employee") {
+            
+            } else {
+                $customer = Customer::where('user_id',Auth::id())->first();
+                return response()->json($customer);
+                // return response()->json(["success" => "Successfully login!"]);
+            }
+        }
     }
 }
