@@ -1,28 +1,34 @@
 @extends('layouts.base')
 @section('body')
 
-<div class="container">
-    <div class="table-responsive">
-        <table id="emtable" class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>Customer I.D</th>
-                    <th>Title</th>
-                    <th>Last name</th>
-                    <th>First name</th>
-                    <th>Address</th>
-                    <th>Zipcode</th>
-                    <th>Town</th>
-                    <th>Phone</th>
-                    <th>Image</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                    <th>Restore</th>
-                </tr>
-            </thead>
-            <tbody id="embody">
-            </tbody>
-        </table>
+<h1 class="display-6 fw-bold">Employee CRUD</h1>
+<div class="alert alert-success" style="display:none"></div>
+<meta name="csrf-token" content="{{ csrf_token() }}" />
+<div class="container-fluid py-4 bg-light rounded-3 shadow-sm">
+    <div class="container">
+        <div class="table-responsive">
+            <table id="emtable" class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Employee I.D</th>
+                        <th>Title</th>
+                        <th>Last name</th>
+                        <th>First name</th>
+                        <th>Address</th>
+                        <th>Zipcode</th>
+                        <th>Town</th>
+                        <th>Phone</th>
+                        <th>Role</th>
+                        <th>Image</th>
+                        <th>Status</th>
+                        <th>Edit</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="embody">
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -107,7 +113,7 @@
 {{-- end of create --}}
 
 {{-- start of edit --}}
-{{-- <div class="modal fade" id="editEmployeeModal" role="dialog" style="display:none">
+<div class="modal fade" id="adminModal" role="dialog" style="display:none">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -115,80 +121,29 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="empform" method="POST" action="#" enctype="multipart/form-data">
-                    {{ csrf_field() }}
+                <form id="adform" method="POST" action="#" enctype="multipart/form-data">
                     <label for="eeemployee_id" class="control-label">Employee ID</label>
                     <input type="text" class="form-control" id="eeemployee_id" name="employee_id" readonly>
                     <div class="row mt-2">
                         <div class="col">
-                            <label for="eetitle" class="control-label">Title</label>
-                            <input type="text" class="form-control" placeholder="Mr." id="eetitle" name="title">
-                        </div>
-                        <div class="col">
-                            <label for="eelname" class="control-label">First name</label>
-                            <input type="text" class="form-control" placeholder="Juan" id="eefname" name="fname">
-                        </div>
-                        <div class="col">
-                            <label for="eelname" class="control-label">Last name</label>
-                            <input type="text" class="form-control" placeholder="Dela Cruz" id="eelname" name="lname">
-                        </div>  
-                    </div>
-
-                    <div class="row mt-2">
-                        <div class="col">
-                            <label for="eeaddressline" class="control-label">Addressline</label>
-                            <input type="text" class="form-control" placeholder="Lot 24A Block 52 New Lower..." id="eeaddressline" name="addressline">
+                        <label class="control-label">Selec a role:</label>
+                        <select class="form-select" aria-label="Default select example" id="eerole" name="role">
+                            <option value="employee">Employee</option>
+                            <option value="admin">Admin</option>
+                        </select>
                         </div>
                     </div>
-
-                    <div class="row mt-2">
-                        <div class="col">
-                            <label for="eetown" class="control-label">Town</label>
-                            <input type="text" class="form-control" placeholder="Taguig City..." aria-label="Town" id="eetown" name="town">
-                        </div>
-                        <div class="col">
-                            <label for="eezipcode" class="control-label">Zipcode</label>
-                            <input type="text" class="form-control" placeholder="1918" aria-label="Zipcode" id="eezipcode" name="zipcode">
-                        </div>
-                        <div class="col">
-                            <label for="eephone" class="control-label">Phone</label>
-                            <input type="text" class="form-control" placeholder="092187162..." aria-label="Phone" id="eephone" name="phone">
-                        </div>  
-                    </div>
-
-                    <div class="row mt-2">
-                        <div class="col">
-                            <label for="eeemail" class="control-label">Email</label>
-                            <input type="email" class="form-control" id="eeemail" name="email" placeholder="example123@email.com">
-                        </div>
-                        <div class="col">
-                            <label for="eepassword" class="control-label">Password</label>
-                            <input type="password" class="form-control" id="eepassword" name="password">
-                        </div>
-                    </div>
-
-                    <div class="row mt-2">
-                        <div class="col">
-                            <label for="eeimagePath" class="control-label">Profile Picture</label>
-                            <div class="input-group">
-                                <input type="file" class="form-control" id="eeimagePath" name="uploads">
-                                <label class="input-group-text" for="inputGroupFile02">Upload</label>
-                              </div>
-                        </div>
-                    </div>
-    
-                    
-                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-bs-dismiss="modal"><i class="fa-sharp fa-solid fa-circle-xmark"></i> Close</button>
-                <button id="updatebtnEmployee" type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Update</button>
+                <button id="updatebtnAdmin" type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Update</button>
             </div>
         
         </div>
     </div>
     </div>
-    </form> --}}
+    </form>
     {{-- end of edit --}}
 
+    <br>
 @endsection

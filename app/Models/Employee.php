@@ -30,4 +30,8 @@ class Employee extends Model
         return $this->belongsTo('App\Models\User');
     }
 
+    public function consultations() {
+        return $this->belongsTo('App\Models\Consultation');
+    }
+
 }

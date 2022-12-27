@@ -24,7 +24,11 @@ class EmployeeController extends Controller
     {
         if ($request->ajax())
         {
-            $employees = Employee::with('users')->orderBy('employee_id','DESC')->get();
+            // $employees = Employee::withTrashed()->with('users')->orderBy('employee_id','DESC')->get();
+            $employees = DB::table('employees')
+            ->join('users', 'users.id', '=', 'employees.user_id')
+            ->orderBy('employee_id','DESC')
+            ->get();
             return response()->json($employees);
         }
     }
@@ -114,6 +118,18 @@ class EmployeeController extends Controller
         return response()->json($employee);
     }
 
+    public function editRole($id)
+    {
+        // $employee = Employee::with('users')->find($id);
+        // $id = Auth::user()->employees->employee_id;
+
+        $employee = DB::table('employees')
+        ->join('users', 'users.id', '=', 'employees.user_id')
+        ->where('employees.employee_id', '=', $id)
+        ->first();
+
+        return response()->json($employee);
+    }
     /**
      * Update the specified resource in storage.
      *
@@ -142,8 +158,8 @@ class EmployeeController extends Controller
         }
         
         $user = User::find($employee->user_id);
-        $user->name = $request->fname . ' ' . $request->lname;
         if(!empty($request->input('email')) and !empty($request->input('password'))){
+            $user->name = $request->fname . ' ' . $request->lname;
             $user->email = $request->email;
             $user->password = bcrypt($request->input('password'));
             $user->update();
@@ -160,6 +176,22 @@ class EmployeeController extends Controller
         return response()->json($employee);
     } 
 
+    public function updateRole(Request $request, $id)
+    {   
+        if (Auth::check() && Auth::user()->role == 'admin'){
+            $employee = Employee::find($id);
+
+            $user = User::find($employee->user_id);
+            $user->role = $request->role;
+            $user->update();
+
+            return response()->json(["success" => "Employee role updated successfully.","user" => $user ,"status" => 200]);
+        } else {
+            return response()->json(["error" => "Only admin can update a role!"]);
+        }
+
+    } 
+
     /**
      * Remove the specified resource from storage.
      *
@@ -167,9 +199,27 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        $employees = Employee::findOrFail($id);
-        $employees->delete();
-        return response()->json(["success" => "Employee Deleted Successfully!","status" => 200]);
+    {   
+        if (Auth::check() && Auth::user()->role == 'admin'){
+        $employee = Employee::findOrFail($id);
+            $user = User::where('id',$employee->user_id)->delete();
+            $employee->delete();
+            
+            return response()->json(["success" => "Employee Deleted Successfully!","status" => 200]);
+        } else {
+            return response()->json(["error" => "Only admin can deactivate an employee!"]);
+        }
+    }
+
+    public function restore($id) {
+        if (Auth::check() && Auth::user()->role == 'admin'){
+            $employee = Employee::withTrashed()->find($id);
+            $user = User::where('id',$employee->user_id)->restore();
+            $employee->restore(); 
+
+            return response()->json(["success" => "Employee has been Restored!","status" => 200]);
+        } else {
+            return response()->json(["error" => "Only admin can restore an employee account!"]);
+        }
     }
 }

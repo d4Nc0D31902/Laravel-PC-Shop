@@ -30,4 +30,8 @@ class Pcspec extends Model
     public function customers(){
         return $this->belongsTo('App\Models\Customer');
     }
+
+    public function consultations() {
+        return $this->belongsTo('App\Models\Consultation');
+    }
 }

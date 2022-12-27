@@ -1,29 +1,35 @@
 @extends('layouts.base')
 @section('body')
-<div class="container">
-    <div class="table-responsive">
-        <table id="ctable" class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>Customer I.D</th>
-                    <th>Title</th>
-                    <th>Last name</th>
-                    <th>First name</th>
-                    <th>Address</th>
-                    <th>Zipcode</th>
-                    <th>Town</th>
-                    <th>Phone</th>
-                    <th>Image</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                    <th>Restore</th>
-                </tr>
-            </thead>
-            <tbody id="cbody">
-            </tbody>
-        </table>
+
+<h1 class="display-6 fw-bold">Customer CRUD</h1>
+<div class="container-fluid py-4 bg-light rounded-3 shadow-sm">
+    <div class="container">
+        <div class="table-responsive">
+            <table id="ctable" class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Customer I.D</th>
+                        <th>Title</th>
+                        <th>Last name</th>
+                        <th>First name</th>
+                        <th>Addressline</th>
+                        <th>Zipcode</th>
+                        <th>Town</th>
+                        <th>Phone</th>
+                        <th>Image</th>
+                        {{-- <th>Edit</th> --}}
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="cbody">
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+
+<br>
 
 {{-- start of create --}}
 <div class="modal fade" id="customerModal" role="dialog" style="display:none">

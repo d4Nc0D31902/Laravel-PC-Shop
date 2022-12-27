@@ -15,7 +15,7 @@
         </nav>
       </div>
     </div>
-
+    <div class="container-fluid py-4 bg-light rounded-3 shadow-sm">
     <div class="row">
       <div class="col-lg-4">
         <div class="card mb-4">
@@ -23,10 +23,10 @@
             <img src="{{ asset('/storage/' . Auth::user()->customers->imagePath) }}" alt="avatar"
               class="rounded-circle img-fluid" style="width: 150px;">
             <h5 class="my-3" id="cpname">{{ Auth::user()->customers->title }} {{ Auth::user()->name }}</h5>
-            <p class="text-muted mb-1">User#{{ Auth::user()->id }} ({{ Auth::user()->role }})</p>
+            <p class="text-muted mb-1">User#{{ Auth::user()->id }} ({{ Auth::user()->role }} {{ Auth::user()->customers->customer_id }})</p>
             <p class="text-muted mb-4">{{ Auth::user()->customers->addressline }}</p>
             <div class="d-flex justify-content-center mb-2">
-              <button type="button" class="btn btn-primary">Add PC-Spec</button>
+              <button type="button" class="btn btn-primary" id="pcCreateBtn">Add PC-Spec</button>
               <button type="button" class="btn btn-outline-primary ms-1" id="editCustomerBtn">Edit Profile</button>
             </div>
           </div>
@@ -35,7 +35,7 @@
         <div class="card mb-4 mb-lg-0">
           <div class="card-body p-0">
             <ul class="list-group list-group-flush rounded-3">
-              {{-- <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <i class="fas fa-globe fa-lg text-warning"></i>
                 <p class="mb-0">https://mdbootstrap.com</p>
               </li>
@@ -54,7 +54,7 @@
               <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <i class="fab fa-facebook-f fa-lg" style="color: #3b5998;"></i>
                 <p class="mb-0">mdbootstrap</p>
-              </li> --}}
+              </li>
             </ul>
           </div>
         </div>
@@ -92,7 +92,7 @@
             <hr>
             <div class="row">
               <div class="col-sm-3">
-                <p class="mb-0">Address</p>
+                <p class="mb-0">Addressline</p>
               </div>
               <div class="col-sm-9">
                 <p class="text-muted mb-0">{{ Auth::user()->customers->addressline }}</p>
@@ -119,10 +119,10 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md">
             <div class="card mb-4 mb-md-0">
               <div class="card-body">
-                {{-- <p class="mb-4"><span class="text-primary font-italic me-1">assigment</span> Project Status
+                <p class="mb-4"><span class="text-primary font-italic me-1">Transaction</span> History
                 </p>
                 <p class="mb-1" style="font-size: .77rem;">Web Design</p>
                 <div class="progress rounded" style="height: 5px;">
@@ -148,14 +148,14 @@
                 <div class="progress rounded mb-2" style="height: 5px;">
                   <div class="progress-bar" role="progressbar" style="width: 66%" aria-valuenow="66"
                     aria-valuemin="0" aria-valuemax="100"></div>
-                </div> --}}
+                </div>
               </div>
             </div>
           </div>
-          <div class="col-md-6">
+          {{-- <div class="col-md-6">
             <div class="card mb-4 mb-md-0">
               <div class="card-body">
-                {{-- <p class="mb-4"><span class="text-primary font-italic me-1">assigment</span> Project Status
+                <p class="mb-4"><span class="text-primary font-italic me-1">assigment</span> Project Status
                 </p>
                 <p class="mb-1" style="font-size: .77rem;">Web Design</p>
                 <div class="progress rounded" style="height: 5px;">
@@ -181,10 +181,10 @@
                 <div class="progress rounded mb-2" style="height: 5px;">
                   <div class="progress-bar" role="progressbar" style="width: 66%" aria-valuenow="66"
                     aria-valuemin="0" aria-valuemax="100"></div>
-                </div> --}}
+                </div>
               </div>
             </div>
-          </div>
+          </div> --}}
         </div>
       </div>
     </div>
@@ -277,6 +277,82 @@
     </div>
     </form>
     {{-- end of edit --}}
+
+    {{-- start of create --}}
+    <div class="modal fade" id="pcCreateModal" role="dialog" style="display:none">
+      <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Create new PC-Spec</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="alert alert-danger" style="display:none"></div>
+              <div class="modal-body">
+                  <form id="pcform" method="post" action="#" enctype="multipart/form-data">
+                      <meta name="csrf-token" content="{{ csrf_token() }}" />
+
+                      <div class="row mt-2">
+                          <div class="col">
+                              <label for="pccpu" class="control-label">Processor (CPU)</label>
+                              <input type="text" class="form-control" placeholder="Intel i3-10100f..." id="pccpu" name="cpu">
+                          </div>
+                          <div class="col">
+                              <label for="pcmotherboard" class="control-label">Motherboard</label>
+                              <input type="text" class="form-control" placeholder="MSI Z790 Edge... " id="pcmotherboard" name="motherboard">
+                          </div>
+                          <div class="col">
+                              <label for="pcgpu" class="control-label">Graphic Card (GPU)</label>
+                              <input type="text" class="form-control" placeholder="GTX 1060ti..." id="pcgpu" name="gpu">
+                          </div>  
+                      </div>
+
+                      <div class="row mt-2">
+                          <div class="col">
+                              <label for="pcram" class="control-label">Ram</label>
+                              <input type="text" class="form-control" placeholder="Kingston 16gb 2666mhz..." id="pcram" name="ram">
+                          </div>
+                          <div class="col">
+                              <label for="pchdd" class="control-label">HDD</label>
+                              <input type="text" class="form-control" placeholder="Seagate 2TB Skyhawk..." id="pchdd" name="hdd">
+                          </div>
+                          <div class="col">
+                              <label for="pcsdd" class="control-label">SDD</label>
+                              <input type="text" class="form-control" placeholder="Gigabyte 2TB..." id="pcsdd" name="sdd">
+                          </div>  
+                      </div>
+
+                      <div class="row mt-2">
+                          <div class="col">
+                              <label for="pcpsu" class="control-label">Powersupply (PSU)</label>
+                              <input type="text" class="form-control" id="pcpsu" name="psu" placeholder="Corsair CV Series CV550 - 80 Plus Bronze...">
+                          </div>
+                          <div class="col">
+                              <label for="pcpc_case" class="control-label">PC Case</label>
+                              <input type="text" class="form-control" placeholder="Asus TUF Gaming GT501 White Edition..." id="pcpc_case" name="pc_case">
+                          </div>
+                      </div>
+
+                      <div class="row mt-2">
+                          <div class="col">
+                              <label for="imagePath" class="control-label">PC Picture</label>
+                              <div class="input-group">
+                                  <input type="file" class="form-control" id="imagePath" name="uploads">
+                                  <label class="input-group-text" for="inputGroupFile02">Upload</label>
+                                </div>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+              
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-bs-dismiss="modal"><i class="fa-sharp fa-solid fa-circle-xmark"></i> Close</button>
+                  <button id="pcspecSubmit" type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+              </div>
+          </div>
+      </div>
+    </div>
+    {{-- end of create --}}
+
     @else
     <section style="background-color: rgb(255, 255, 255);">
         <div class="container">
@@ -494,6 +570,7 @@
         </div>
     </div>
     </div>
+  </div>
     </form>
     
     @endif

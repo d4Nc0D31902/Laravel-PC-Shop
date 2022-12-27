@@ -30,7 +30,7 @@ class Customer extends Model
     public function users() {
         return $this->belongsTo('App\Models\User');
     }
-
+    
     public function pcspecs() {
         return $this->hasMany('App\Models\Pcspec', 'customer_id');
     }

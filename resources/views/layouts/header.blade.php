@@ -57,5 +57,6 @@ crossorigin="anonymous" referrerpolicy="no-referrer">
 <script src="js/product.js"></script>
 <script src="js/pcspec.js"></script>
 <script src="js/login.js"></script>
-{{-- <script src="js/profile.js"></script> --}}
+<script src="js/profile.js"></script>
+<script src="js/consultation.js"></script>
 {{-- <script src="js/dashboard.js"></script> --}}

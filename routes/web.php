@@ -17,7 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['middleware' => ['auth:sanctum']], function () {
+Route::group(['middleware' => ['auth:sanctum',  'role:admin,employee']], function () {
     Route::resource('customer', 'CustomerController');
     Route::view('/customer', 'customer.index');
 
@@ -28,12 +28,17 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::view('/product', 'product.index');
 
     Route::resource('pcspec', 'PcspecController');
-    Route::view('/pcspec', 'pcspec.index');
+    Route::get('/pcspec', ['uses' => 'PcspecController@index']);
+
+    Route::resource('consultation', 'ConsultationController');
+    Route::get('/consultation', ['uses' => 'ConsultationController@index']);
 });
 
-// Route::group(['middleware' => ['auth:sanctum', 'role:customer']], function () {
-//     Route::resource('customer', 'CustomerController');
-// });
+Route::view('/pcspec-all', 'pcspec.index');
+
+Route::group(['middleware' => ['auth:sanctum', 'role:customer']], function () {
+    Route::resource('customer', 'CustomerController')->only(['edit', 'update']);
+});
 
 // Route::group(['middleware' => 'guest'], function() {
 //     Route::resource('customer', 'CustomerController');
@@ -56,10 +61,10 @@ Route::view('/profile', 'profile.customer');
 //     'as' => 'profile.customer',
 //   ]);
 
-Route::get('/getProfile', [
-    'uses' => 'UserController@getProfile',
-    'as' => 'getProfile.customer',
-  ]);
+// Route::get('/profile', [
+//     'uses' => 'UserController@getProfile',
+//     'as' => 'getProfile.customer',
+//   ]);
 
 // Route::view('/profile', 'profile.customer');
 
@@ -67,7 +72,6 @@ Route::get('signin', [
           'uses' => 'LoginController@index',
           'as' => 'user.signin',
       ]);
-
 Auth::routes(['verify' => true]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

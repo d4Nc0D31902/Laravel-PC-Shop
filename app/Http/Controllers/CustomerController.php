@@ -12,6 +12,7 @@ use DB;
 use Log;
 use Validator;
 use Auth;
+
 class CustomerController extends Controller
 {
     /**
@@ -29,7 +30,7 @@ class CustomerController extends Controller
     {
         if ($request->ajax())
         {
-            $customers = Customer::with('users')->orderBy('customer_id','DESC')->get();
+            $customers = Customer::withTrashed()->with('users')->orderBy('customer_id','DESC')->get();
             return response()->json($customers);
             // return response()->json(['customer'])
         }
@@ -65,7 +66,6 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {   
-
         $validator = \Validator::make($request->all(), [
             'email' => 'email| required| unique:users',
             'password' => 'required| min:3'
@@ -80,6 +80,7 @@ class CustomerController extends Controller
             'email' => $request->input('email'),
             'password' => bcrypt($request->input('password'))
         ]);
+        
         $user->role = 'customer';
         $user->save();
 
@@ -192,12 +193,17 @@ class CustomerController extends Controller
     public function destroy($id)
     {
         $customers = Customer::findOrFail($id);
+        $user = User::where('id',$customers->user_id)->delete();
         $customers->delete();
-        return response()->json(["success" => "Customer Deleted Successfully!","status" => 200]);
+
+        return response()->json(["success" => "Customer Deactivated Successfully!","status" => 200]);
     }
 
-    public function profile()
-    {
-        
+    public function restore($id) {
+        $customer = Customer::withTrashed()->find($id);
+        $user = User::where('id',$customer->user_id)->restore();
+        $customer->restore(); 
+
+        return response()->json(["success" => "Customer has been Restored!","status" => 200]);
     }
 }

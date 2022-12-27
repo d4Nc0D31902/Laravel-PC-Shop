@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Customer;
 use Auth;
 use View;
+use DB;
 
 class UserController extends Controller
 {
@@ -86,9 +87,29 @@ class UserController extends Controller
         //
     }
     
-    public function getProfile()
+   
+ public function getProfile(Request $request)
     {
-        return View::make('profile.customer');
+        if ($request->ajax()){
+            if(Auth::check()){
+                if(Auth::user()->user === "admin") {
+
+                } elseif(Auth::user()->user === "employee") {
+                
+                } else {
+                    // $customer = Customer::where('user_id',Auth::user()->)->first();
+                    $id = Auth::user()->customers->customer_id;
+
+                    $customer = DB::table('customers')
+                    ->join('users', 'users.id', '=', 'customers.user_id')
+                    ->where('customers.customer_id', '=', $id)
+                    ->first();
+                    
+                    return response()->json($customer);
+                    // return response()->json(["success" => "Successfully login!"]);
+                }
+            }
+        }
     }
 
     public function profile(Request $request)

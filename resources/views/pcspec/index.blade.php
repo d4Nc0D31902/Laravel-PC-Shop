@@ -1,31 +1,37 @@
 @extends('layouts.base')
 @section('body')
-<div class="container">
-    <div class="table-responsive">
-        <table id="pctable" class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>Pc-spec I.D</th>
-                    <th>Customer I.D</th>
-                    <th>Cpu</th>
-                    <th>Motherboard</th>
-                    <th>Gpu</th>
-                    <th>Ram</th>
-                    <th>Hdd</th>
-                    <th>Sdd</th>
-                    <th>Psu</th>
-                    <th>PC Case</th>
-                    <th>Image</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                    <th>Restore</th>
-                </tr>
-            </thead>
-            <tbody id="pcbody">
-            </tbody>
-        </table>
+
+<h1 class="display-6 fw-bold">Pc-Spec CRUD</h1>
+<div class="container-fluid py-4 bg-light rounded-3 shadow-sm">
+    <div class="container">
+        <div class="table-responsive">
+            <table id="pctable" class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Pc-spec I.D</th>
+                        <th>Customer I.D</th>
+                        <th>Cpu</th>
+                        <th>Motherboard</th>
+                        <th>Gpu</th>
+                        <th>Ram</th>
+                        <th>Hdd</th>
+                        <th>Sdd</th>
+                        <th>Psu</th>
+                        <th>PC Case</th>
+                        <th>Image</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                        <th>Restore</th>
+                    </tr>
+                </thead>
+                <tbody id="pcbody">
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+
+<br>
 
 {{-- start of create --}}
 <div class="modal fade" id="pcCreateModal" role="dialog" style="display:none">
@@ -37,8 +43,8 @@
             </div>
             <div class="alert alert-danger" style="display:none"></div>
             <div class="modal-body">
-                <form id="cform" method="post" action="#" enctype="multipart/form-data">
-                    
+                <form id="pcform" method="post" action="#" enctype="multipart/form-data">
+                    <meta name="csrf-token" content="{{ csrf_token() }}" />
                     {{-- <div class="row">
                         <div class="col">
                             <label for="caddressline" class="control-label">Owner Name/Id</label>
@@ -49,11 +55,11 @@
                     <div class="col-md-4 mb-3">
                         <label for="customer_id">Owner Name</label>
                         <select class="form-control" id="customer_id" name="customer_id" required="">
-                          {{-- @foreach($customers as $id => $customer)
-                            <option value="{{$id}}"><a> {{$customer}} </a></option>
-                          @endforeach --}}
+                            @foreach($customers as $id => $customer)
+                            <option value="{{ $id }}"><a> {{$customer}} </a></option>
+                            @endforeach
                         </select>
-                      </div>
+                    </div>
                       
                     {{-- <div class="col-md-4 mb-3">
                     <label for="customer_id">Owner Name</label>
@@ -119,7 +125,7 @@
             
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-bs-dismiss="modal"><i class="fa-sharp fa-solid fa-circle-xmark"></i> Close</button>
-                <button id="customerSubmit" type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                <button id="pcspecSubmit" type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save</button>
             </div>
         </div>
     </div>

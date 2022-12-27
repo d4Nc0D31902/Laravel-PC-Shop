@@ -9,6 +9,7 @@ use View;
 use Storage;
 use File;
 use DB;
+use Auth;
 
 class PcspecController extends Controller
 {
@@ -17,6 +18,12 @@ class PcspecController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     public function getAll(Request $request)
+     {
+         
+     }
+
     public function getPcspecAll(Request $request){
         if ($request->ajax())
         {
@@ -25,8 +32,14 @@ class PcspecController extends Controller
         }
     }
     
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->ajax())
+        {
+            $pcspecs = Pcspec::with('customers')->orderBy('pc_id','DESC')->get();
+            return response()->json($pcspecs);
+        }
+
         $customers = Customer::select("customer_id", DB::raw("CONCAT(fname, ' ' , lname) AS name"))->pluck('name','customer_id');
         return View::make('pcspec.index',compact('customers'));
     }
@@ -48,15 +61,25 @@ class PcspecController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        // $validator = \Validator::make($request->all(), [
-        //     'email' => 'email| required| unique:users',
-        //     'password' => 'required| min:3'
-        // ]);
+    {   
+        $validator = \Validator::make($request->all(), [
+            'cpu' => 'required',
+            'motherboard' => 'required'
+        ]);
         
-        // if($validator->fails()){
-        //     return response()->json(['errors'=>$validator->errors()->all()]);
-        // }
+        if($validator->fails()){
+            return response()->json(['errors'=>$validator->errors()->all()]);
+        }
+
+        $pcspecs = new Pcspec;
+
+        if(Auth::user()->role == 'admin' or Auth::user()->role == 'employee'){
+            $pcspecs->customer_id = $request->customer_id;
+        } 
+        else{
+            $cusid = Auth::user()->customers->customer_id;
+            $pcspecs->customer_id = $cusid;
+        }
 
         $pcspecs->cpu = $request->cpu;
         $pcspecs->motherboard = $request->motherboard;
@@ -75,7 +98,7 @@ class PcspecController extends Controller
 
         $pcspecs->save();
         
-        return response()->json(["success" => "PC Information Created Successfully!","pcspec" => $pcspecs ,"status" => 200]);
+        return response()->json(["success" => "PC Information Created Successfully!", "pcspecs" => $pcspecs ,"status" => 200]);
     }
 
     /**
@@ -95,9 +118,23 @@ class PcspecController extends Controller
      * @param  \App\Models\Pcspec  $pcspec
      * @return \Illuminate\Http\Response
      */
-    public function edit(Pcspec $pcspec)
-    {
-        //
+    public function edit($id)
+    {   
+        if(Auth::check() && Auth::user->role == 'admin'){
+
+        } 
+        else{
+
+        }
+        
+        $id = Auth::user()->employees->employee_id;
+
+        $employee = DB::table('employees')
+        ->join('users', 'users.id', '=', 'employees.user_id')
+        ->where('employees.employee_id', '=', $id)
+        ->first();
+
+        return response()->json($employee);
     }
 
     /**
@@ -107,9 +144,35 @@ class PcspecController extends Controller
      * @param  \App\Models\Pcspec  $pcspec
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pcspec $pcspec)
+    public function update(Request $request, $id)
     {
-        //
+        if(Auth::check() && Auth::user->role == 'admin'){
+            $pcspec = Pcspec::find($id);
+            $pcspec->cpu = $request->cpu;
+            $pcspec->motherboard = $request->fname;
+            $pcspec->gpu = $request->gpu;
+            $pcspec->ram = $request->ram;
+            $pcspec->hdd = $request->hdd;
+            $pcspec->sdd = $request->sdd;
+            $pcspec->psu = $request->psu;
+            $pcspec->pc_case = $request->pc_case;
+
+            if($files = $request->hasFile('uploads')) {
+            $files = $request->file('uploads');
+            $pcspec->imagePath = 'images/'.$files->getClientOriginalName();
+            $pcspec->update();
+            Storage::put('/public/images/'.$files->getClientOriginalName(),file_get_contents($files));   
+            } else {
+                $pcspec->update();
+            }
+
+            return response()->json(["success" => "Pc-Spec updated successfully.","pcspec" => $pcspec ,"status" => 200]);
+        } 
+        else{
+            return response()->json(["error" => "Only admin can update the pcspec","pcspec" => $pcspec ,"status" => 200]);
+
+            return response()->json(['errors'=>$validator->errors()->all()]);
+        }
     }
 
     /**

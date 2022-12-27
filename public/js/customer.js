@@ -90,14 +90,14 @@ $(document).ready(function () {
         buttons:[
             'pdf',
             'excel',
-            {
-                text:'Add New Customer',
-                className: 'btn btn-primary',
-                action: function(e, dt, node, config){
-                    $("#cform").trigger("reset");
-                    $('#customerModal').modal('show');
-                }
-            }
+            // {
+            //     text:'Add New Customer',
+            //     className: 'btn btn-primary',
+            //     action: function(e, dt, node, config){
+            //         $("#cform").trigger("reset");
+            //         $('#customerModal').modal('show');
+            //     }
+            // }
         ],
         columns:[
             {data: 'customer_id'},
@@ -112,22 +112,28 @@ $(document).ready(function () {
             {data: null,
                 render: function (data,type,JsonResultRow,row) {
                     return '<img src="/storage/' + JsonResultRow.imagePath + '" width="100px" height="100px">';
-                },
+                }, orderable: false, searchable: false
+            },
+            // {data: null,
+            //     render: function (data, type, row) {
+            //         return "<a href='#' class='editBtn id='editbtn' data-id=" +
+            //             data.customer_id + "><i class='fa-solid fa-pen-to-square' aria-hidden='true' style='font-size:30px' ></i></a>";
+            //     },
+            // },
+            {data: null,
+                render: function (data, type, row) {
+                    if(data.deleted_at)
+                    return "<span class='badge rounded-pill bg-secondary'>Deactivated</span>";
+                    else
+                    return "<span class='badge rounded-pill bg-success'>Active</span>";
+                }, orderable: false, searchable: false
             },
             {data: null,
                 render: function (data, type, row) {
-                    return "<a href='#' class='editBtn id='editbtn' data-id=" +
-                        data.customer_id + "><i class='fa-solid fa-pen-to-square' aria-hidden='true' style='font-size:30px' ></i></a>";
-                },
-            },
-            {data: null,
-                render: function (data, type, row) {
+                    if(data.deleted_at)
+                    return "<a href='#' class='restorebtn' data-id=" + data.customer_id + "><i class='fa-solid fa-rotate-right' style='font-size:30px; color:primary'></a></i>";
+                    else 
                     return "<a href='#' class='deletebtn' data-id=" + data.customer_id + "><i class='fa-sharp fa-solid fa-trash' style='font-size:30px; color:red'></a></i>";
-                },
-            },
-            {data: null,
-                render: function (data, type, row) {
-                    return "<a href='#' class='restorebtn' data-id=" + data.customer_id + "><i class='fa-solid fa-rotate-right' style='font-size:30px; color:red'></a></i>";
                 },  orderable: false, searchable: false
             },
         ]
@@ -325,9 +331,10 @@ $("#editCustomerBtn").on("click", function (e) {
                         success: function (data) {
                             console.log(data);
                             
-                            $row.fadeOut(4000, function(){
-                                table.row($row).remove().draw(false)
-                            });
+                            // $row.fadeOut(4000, function(){
+                            //     table.row($row).remove().draw(false)
+                            // });
+                            window.location.reload();
 
                             bootbox.alert(data.success)
                         },
@@ -339,5 +346,55 @@ $("#editCustomerBtn").on("click", function (e) {
             },
         });
     });//DELETE
+
+    $("#ctable tbody").on("click", "a.restorebtn", function (e) {
+        var table = $('#ctable').DataTable();
+        var id = $(this).data('id');
+        var $row = $(this).closest('tr');
+        // var cRow = $("tr td:contains(" + id + ")").closest('tr');
+        console.log(id);
+
+        e.preventDefault();
+        bootbox.confirm({
+            message: "Do you want to restore this customer?",
+            buttons: {
+                confirm: {
+                    label: "Yes",
+                    className: "btn-success",
+                },
+                cancel: {
+                    label: "No",
+                    className: "btn-danger",
+                },
+            },
+            callback: function (result) {
+                if (result)
+                    $.ajax({
+                        type: "GET",
+                        url: "/api/customer/restore/" + id,
+                        headers: {
+                            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                                "content"
+                            ),
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data);
+                            
+                            // $row.fadeOut(4000, function(){
+                            //     table.row($row).remove().draw(false)
+                            // });
+                            window.location.reload();
+                            // table.row(cRow).data(data).invalidate().draw(false);
+                            bootbox.alert(data.success)
+                        },
+
+                        error: function (error) {
+                            console.log(error);
+                        },
+                    });
+            },
+        });
+    });//RESTORE
 
 }); // end of document

@@ -5,12 +5,23 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Auth;
-use Session;
 use View;
 
 class LoginController extends Controller
 {   
-    public function index(){
+    public function index(Request $request){
+        if ($request->ajax())
+        {
+            $id = Auth::user()->customers->customer_id;
+
+            $customer = DB::table('customers')
+            ->join('users', 'users.id', '=', 'customers.user_id')
+            ->where('customers.customer_id', '=', $id)
+            ->first();
+            
+            return response()->json($customer);
+        }
+
         return View::make('user.signin');
     }
 
@@ -24,14 +35,14 @@ class LoginController extends Controller
         if(auth()->attempt(array('email' => $request->email, 'password' => $request->password))) {
 
             $user = User::where('email', $request->email)->first();
-            // $user = Auth::user();
+            
             $authToken = $user->createToken('auth-token')->plainTextToken;
-
+            
             if (auth()->user()->role === 'employee') {
                 return response()->json(['access_token' => $authToken, "success" => "Employee Login Successfully!","status" => 200 ]);
             } 
             else if (auth()->user()->role === 'admin'){
-                return response()->json(['access_token' => $authToken, "success" => "Employee Login Successfully!","status" => 200 ]);
+                return response()->json(['access_token' => $authToken, "success" => "Admin Login Successfully!","status" => 200 ]);
             }  
             else {
                 return response()->json(['access_token' => $authToken, "success" => "Customer Login Successfully!","status" => 200]);

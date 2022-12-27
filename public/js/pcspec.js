@@ -53,6 +53,53 @@ $(document).ready(function () {
         
     })//end datatables
 
+    $("#pcspecSubmit").on("click", function (e) {
+        e.preventDefault();
+        // var data = $("#iform").serialize();
+        var data = $('#pcform')[0];
+        console.log(data);
+        let formData = new FormData(data);
+    
+        console.log(formData);
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
+        }
+    
+        $.ajax({
+            type: "POST",
+            url: "/api/pcspec",
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            dataType:"json", 
+            accepts: {
+                json: 'application/json'
+            },
+            success:function(data){
+                if (data.errors) {
+                    bootbox.alert({
+                        message: data.errors,
+                        className: 'rubberBand animated'});
+                } else {
+                    console.log(data);
+                    $("#pcCreateModal").modal("hide");
+                    
+                    var $pctable = $('#pctable').DataTable();
+                    $pctable.row.add(data.pcspecs).draw(false); 
+
+                    bootbox.alert({
+                        message: data.success,
+                        className: 'rubberBand animated'});
+                }
+            },
+            error:function (error){
+                console.log(error);
+            }
+        })
+    });
+
+
     $("#pctable tbody").on("click", "a.deletebtn", function (e) {
         var table = $('#pctable').DataTable();
         var id = $(this).data('id');
@@ -100,4 +147,9 @@ $(document).ready(function () {
             },
         });
     });//DELETE
+
+    $("#pcCreateBtn").on("click", function (e) {
+        $('#pcCreateModal').modal('show');
+    });  
+    
 });
