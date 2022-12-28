@@ -28,6 +28,7 @@
 <div class="modal fade" id="productModal" role="dialog" style="display:none">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
+            <meta name="csrf-token" content="{{ csrf_token() }}" />
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Create New Product</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

@@ -24,6 +24,8 @@ class ProductController extends Controller
         if ($request->ajax())
         {
             $products = Product::orderBy('product_id','DESC')->get();
+
+            // $products = Product::search(request('search'))->paginate();
             return response()->json($products);
         }
     }
