@@ -103,6 +103,11 @@ Route::get('/profile/index', [
 
 Route::view('/profile', 'profile.customer');
 
+Route::view('/homepage', 'homepage.index');
+
+Route::view('/shop-index', 'shop.index');
+Route::post('/product/checkout',['uses' => 'ProductController@postCheckout','as' => 'checkout']);
+
 // Route::resource('user', 'UserController');
 // Route::view('/profile', 'profile.customer');
 Auth::routes(['verify' => true]);

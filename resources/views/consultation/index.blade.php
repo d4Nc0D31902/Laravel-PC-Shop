@@ -6,7 +6,7 @@
     <div class="container">
         <div class="table-responsive">
             <table id="contable" class="table table-striped table-hover">
-                <thead></thead>
+                <thead>
                     <tr>
                         <th>Consultation I.D</th>
                         <th>PC I.D</th>

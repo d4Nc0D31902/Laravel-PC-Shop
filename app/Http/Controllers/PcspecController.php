@@ -81,6 +81,9 @@ class PcspecController extends Controller
             $pcspecs->customer_id = $cusid;
         }
 
+        //for api only
+        // $pcspecs->customer_id = $request->customer_id;
+
         $pcspecs->cpu = $request->cpu;
         $pcspecs->motherboard = $request->motherboard;
         $pcspecs->gpu = $request->gpu;
@@ -120,12 +123,12 @@ class PcspecController extends Controller
      */
     public function edit($id)
     {   
-        if(Auth::check() && Auth::user->role == 'admin'){
+        // if(Auth::check() && Auth::user->role == 'admin'){
 
-        } 
-        else{
+        // } 
+        // else{
 
-        }
+        // }
         
         $id = Auth::user()->employees->employee_id;
 
@@ -146,7 +149,7 @@ class PcspecController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if(Auth::check() && Auth::user->role == 'admin'){
+        // if(Auth::check() && Auth::user->role == 'admin'){
             $pcspec = Pcspec::find($id);
             $pcspec->cpu = $request->cpu;
             $pcspec->motherboard = $request->fname;
@@ -167,12 +170,12 @@ class PcspecController extends Controller
             }
 
             return response()->json(["success" => "Pc-Spec updated successfully.","pcspec" => $pcspec ,"status" => 200]);
-        } 
-        else{
-            return response()->json(["error" => "Only admin can update the pcspec","pcspec" => $pcspec ,"status" => 200]);
+        // } 
+        // else{
+        //     return response()->json(["error" => "Only admin can update the pcspec","pcspec" => $pcspec ,"status" => 200]);
 
-            return response()->json(['errors'=>$validator->errors()->all()]);
-        }
+        //     return response()->json(['errors'=>$validator->errors()->all()]);
+        // }
     }
 
     /**
@@ -185,6 +188,6 @@ class PcspecController extends Controller
     {
         $pcspec = Pcspec::findOrFail($id);
         $pcspec->delete();
-        return response()->json(["success" => "Customer Deleted Successfully!","status" => 200]);
+        return response()->json(["success" => "Pcspec Deleted Successfully!","status" => 200]);
     }
 }

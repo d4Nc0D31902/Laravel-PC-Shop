@@ -395,6 +395,6 @@ $("#editCustomerBtn").on("click", function (e) {
                     });
             },
         });
-    });//RESTORE
+    });
 
 }); // end of document

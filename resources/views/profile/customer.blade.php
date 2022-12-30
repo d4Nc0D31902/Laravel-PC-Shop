@@ -10,7 +10,7 @@
           <ol class="breadcrumb mb-0">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
             <li class="breadcrumb-item"><a href="#">User</a></li>
-            <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+            <li class="breadcrumb-item active" aria-current="page">Profile</li>
           </ol>
         </nav>
       </div>
@@ -362,7 +362,7 @@
                 <ol class="breadcrumb mb-0">
                   <li class="breadcrumb-item"><a href="#">Home</a></li>
                   <li class="breadcrumb-item"><a href="#">User</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+                  <li class="breadcrumb-item active" aria-current="page">Profile</li>
                 </ol>
               </nav>
             </div>

@@ -1,0 +1,160 @@
+
+header {
+  height: 100px;
+  background:fixed;
+}
+
+.button5 {
+  background-color: #883030;
+  color: white;
+  border-radius: 25px;
+  border: transparent;
+  padding: 15px;
+  
+}
+
+.button5:hover {
+  background-color: #c76d6d;
+  color:  #353535;
+}
+
+.removeproduct {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+  padding: 5px;
+  border-radius: 5px;
+  
+}
+
+.removeproduct:hover {
+  background-color: #8d2222;
+  color: white;
+}
+
+.fa fa-shopping-cart fa-2x openCloseCart {
+  padding-top: 10px;
+}
+
+h1 {
+  float: left;
+  margin: 0;
+}
+
+h2 {
+  margin: 0 0 50px;
+}
+
+#cart-container {
+  float: right;
+  width: 210px;
+  position: relative;
+}
+
+#productCount {
+  position: absolute;
+  display: none;
+  top: -10px;
+  left: -10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: red;
+  color: white;
+  text-align: center;
+}
+
+
+img {
+  width: 100%;
+}
+
+.product {
+  width: 31%;
+  float: left;
+  margin: 1%;
+}
+
+.productText p {
+  margin-bottom: 20px;
+}
+
+.price-container {
+  margin-top: 20px;
+}
+
+i:hover {
+  cursor: pointer;
+}
+
+.solid {border-style: solid;}
+
+#shoppingCart {
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: none;
+  position: absolute;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+#cartproductsContainer {
+  position: relative;
+  width: 600px;
+  left: 50%;
+  top: 150px;
+  margin-left: -300px;
+  padding: 40px;
+  box-shadow: 0 0 10px black;
+  background: #e9e9e9;
+  overflow: auto;
+}
+
+#cartproductsContainer i {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+#cartproductsContainer .productDetails {
+  overflow: auto;
+  width: 100%;
+  margin-bottom: 40px;
+  margin-top: 10;
+}
+
+#cartproductsContainer .productImage {
+  float: none;
+  width: 520px;
+  height: 400px;
+  padding: 40 40px;
+}
+
+#cartproductsContainer .productText {
+  text-align: center;
+  margin-top: 10;
+  font: bold 18px Century, serif;
+
+}
+
+#cartproductsContainer .productID {
+  text-align: center;
+  margin-top: 10;
+  font: bold 18px Century, serif;
+
+}
+
+#cartproductsContainer .productText .price-container {
+  margin-top: 10;
+  align-items: center;
+}
+/*   
+.removeproduct {
+  
+} */
+
+#product {
+  border: #444444;
+}

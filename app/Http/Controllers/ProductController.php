@@ -4,8 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\Customer;
+use App\Models\Order;
+use App\Models\Stock;
 use View;
 use Storage;
+use File;
+use DB;
+use Log;
+use Auth;
+use Carbon\Carbon;
 
 class ProductController extends Controller
 {
@@ -122,4 +130,38 @@ class ProductController extends Controller
         $products->delete();
         return response()->json(["success" => "Product Deleted Successfully!","status" => 200]);
     }
+
+    public function postCheckout(Request $request)
+    {
+        $products = json_decode($request->getContent(),true);
+        Log::info(print_r($products, true));
+        
+        try {
+            DB::beginTransaction();
+            $order = new Order();
+            $order->date_placed = Carbon::now();
+            // $customer = Customer::find(1);
+            $cusid = Auth::user()->customers->customer_id;
+            $customer = Customer::find($cusid);
+            $customer->orders()->save($order);
+            //  dd($cart->products);
+            // Log::info(print_r($order->orderinfo_id, true));
+            foreach($products as $product) {
+               $id = $product['product_id'];
+               $order->products()->attach($order->orderinfo_id,['quantity'=> $product['quantity'],'product_id'=>$id]);
+            //    Log::info(print_r($order, true));
+               $stock = Stock::find($id);
+               $stock->quantity = $stock->quantity - $product['quantity'];
+               $stock->save();
+            }
+          }
+          
+            catch (\Exception $e) {
+            DB::rollback();
+              return response()->json(array('status' => 'Order Failed','code'=>409,'error'=>$e->getMessage()));
+            }
+      
+            DB::commit();
+            return response()->json(array('status' => 'Order Success','code'=>200 , 'order id'=>$order,'stock'=>$order));
+    }//end postcheckout
 }

@@ -54,6 +54,9 @@ Route::group(['middleware' => ['auth:sanctum', 'role:customer']], function () {
 //   });
 // });
 
+Route::resource('shop', 'ProductController');
+Route::view('/shop', 'shop.index');
+
 Route::view('/profile', 'profile.customer');
 
 // Route::get('/profile', [

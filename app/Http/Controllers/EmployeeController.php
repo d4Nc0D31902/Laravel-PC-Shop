@@ -173,7 +173,7 @@ class EmployeeController extends Controller
 
         }
 
-        return response()->json($employee);
+        return response()->json([$employee, $user]);
     } 
 
     public function updateRole(Request $request, $id)

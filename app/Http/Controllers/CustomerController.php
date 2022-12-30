@@ -120,7 +120,7 @@ class CustomerController extends Controller
      * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function edit()
+    public function edit($id)
     {
         // $customer = Customer::with('users')->find($id);
         // $customer = Customer::with('users')->where('customer_id',$id)->first();

@@ -30,5 +30,9 @@ class Product extends Model
             'name' => $this->name,
             'price' => $this->price,
         ];
+    }   
+
+    public function orders() {
+        return $this->belongToMany(Order::class,'orderline','orderinfo_id','product_id');
     }
 }
