@@ -21,7 +21,6 @@
                         <th>Image</th>
                         <th>Edit</th>
                         <th>Delete</th>
-                        <th>Restore</th>
                     </tr>
                 </thead>
                 <tbody id="pcbody">
@@ -43,7 +42,7 @@
             </div>
             <div class="alert alert-danger" style="display:none"></div>
             <div class="modal-body">
-                <form id="pcform" method="post" action="#" enctype="multipart/form-data">
+                <form id="pcform" method="POST" action="#" enctype="multipart/form-data">
                     <meta name="csrf-token" content="{{ csrf_token() }}" />
                     {{-- <div class="row">
                         <div class="col">
@@ -133,71 +132,79 @@
 {{-- end of create --}}
 
 {{-- start of edit --}}
-<div class="modal fade" id="editCustomerModal" role="dialog" style="display:none">
-    <div class="modal-dialog">
+<div class="modal fade" id="editPcModal" role="dialog" style="display:none">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Customer</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Edit Customer PC</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="cusform" method="POST" action="#" enctype="multipart/form-data">
-                    <label for="cccustomer_id" class="control-label">Customer ID</label>
-                    <input type="text" class="form-control" id="cccustomer_id" name="customer_id" readonly>
+                <form id="editpcform" method="POST" action="#" enctype="multipart/form-data">
+                    <input type="text" class="form-control" id="ppc_id" name="pc_id" type="hidden">
+
+                    <div class="row">
+                        <div class="col">
+                            <label for="name" class="control-label">Owner of PC</label>
+                            <input type="text" class="form-control" id="name" name="name" readonly>
+                        </div>
+                    </div>
+
                     <div class="row mt-2">
                         <div class="col">
-                            <label for="cclname" class="control-label">Title</label>
-                            <input type="text" class="form-control" placeholder="Mr." id="cctitle" name="title">
+                            <label for="pccpu" class="control-label">Processor (CPU)</label>
+                            <input type="text" class="form-control" placeholder="Intel i3-10100f..." id="pcpu" name="cpu">
                         </div>
                         <div class="col">
-                            <label for="cclname" class="control-label">First name</label>
-                            <input type="text" class="form-control" placeholder="Juan" id="ccfname" name="fname">
+                            <label for="pcmotherboard" class="control-label">Motherboard</label>
+                            <input type="text" class="form-control" placeholder="MSI Z790 Edge... " id="pmotherboard" name="motherboard">
                         </div>
                         <div class="col">
-                            <label for="cclname" class="control-label">Last name</label>
-                            <input type="text" class="form-control" placeholder="Dela Cruz" id="cclname" name="lname">
+                            <label for="pcgpu" class="control-label">Graphic Card (GPU)</label>
+                            <input type="text" class="form-control" placeholder="GTX 1060ti..." id="pgpu" name="gpu">
                         </div>  
                     </div>
 
                     <div class="row mt-2">
                         <div class="col">
-                            <label for="ccaddressline" class="control-label">Addressline</label>
-                            <input type="text" class="form-control" placeholder="Lot 24A Block 52 New Lower..." id="ccaddressline" name="addressline">
-                        </div>
-                    </div>
-
-                    <div class="row mt-2">
-                        <div class="col">
-                            <label for="cctown" class="control-label">Town</label>
-                            <input type="text" class="form-control" placeholder="Taguig City..." aria-label="Town" id="cctown" name="town">
+                            <label for="pcram" class="control-label">Ram</label>
+                            <input type="text" class="form-control" placeholder="Kingston 16gb 2666mhz..." id="pram" name="ram">
                         </div>
                         <div class="col">
-                            <label for="cczipcode" class="control-label">Zipcode</label>
-                            <input type="text" class="form-control" placeholder="1918" aria-label="Zipcode" id="cczipcode" name="zipcode">
+                            <label for="pchdd" class="control-label">HDD</label>
+                            <input type="text" class="form-control" placeholder="Seagate 2TB Skyhawk..." id="phdd" name="hdd">
                         </div>
                         <div class="col">
-                            <label for="ccphone" class="control-label">Phone</label>
-                            <input type="text" class="form-control" placeholder="092187162..." aria-label="Phone" id="ccphone" name="phone">
+                            <label for="pcsdd" class="control-label">SDD</label>
+                            <input type="text" class="form-control" placeholder="Gigabyte 2TB..." id="psdd" name="sdd">
                         </div>  
                     </div>
 
                     <div class="row mt-2">
                         <div class="col">
-                            <label for="ccimagePath" class="control-label">Profile Picture</label>
+                            <label for="pcpsu" class="control-label">Powersupply (PSU)</label>
+                            <input type="text" class="form-control" id="ppsu" name="psu" placeholder="Corsair CV Series CV550 - 80 Plus Bronze...">
+                        </div>
+                        <div class="col">
+                            <label for="pcpc_case" class="control-label">PC Case</label>
+                            <input type="text" class="form-control" placeholder="Asus TUF Gaming GT501 White Edition..." id="pcase" name="pc_case">
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col">
+                            <label for="imagePath" class="control-label">PC Picture</label>
                             <div class="input-group">
-                                <input type="file" class="form-control" id="ccimagePath" name="uploads">
+                                <input type="file" class="form-control" id="imagePath" name="uploads">
                                 <label class="input-group-text" for="inputGroupFile02">Upload</label>
                               </div>
                         </div>
                     </div>
-
-                    
-                    
                 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-bs-dismiss="modal"><i class="fa-sharp fa-solid fa-circle-xmark"></i> Close</button>
-                <button id="updatebtnCustomer" type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Update</button>
+                <button id="updateBtnPc" type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Update</button>
             </div>
         
         </div>

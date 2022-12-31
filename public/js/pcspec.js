@@ -36,18 +36,13 @@ $(document).ready(function () {
             {data: null,
                 render: function (data, type, row) {
                     return "<a href='#' class='editBtn id='editbtn' data-id=" +
-                        data.customer_id + "><i class='fa-solid fa-pen-to-square' aria-hidden='true' style='font-size:30px' ></i></a>";
+                        data.pc_id + "><i class='fa-solid fa-pen-to-square' aria-hidden='true' style='font-size:30px' ></i></a>";
                 }, orderable: false, searchable: false
             },
             {data: null,
                 render: function (data, type, row) {
-                    return "<a href='#' class='deletebtn' data-id=" + data.customer_id + "><i class='fa-sharp fa-solid fa-trash' style='font-size:30px; color:red'></a></i>";
+                    return "<a href='#' class='deletebtn' data-id=" + data.pc_id + "><i class='fa-sharp fa-solid fa-trash' style='font-size:30px; color:red'></a></i>";
                 }, orderable: false, searchable: false
-            },
-            {data: null,
-                render: function (data, type, row) {
-                    return "<a href='#' class='restorebtn' data-id=" + data.customer_id + "><i class='fa-solid fa-rotate-right' style='font-size:30px; color:red'></a></i>";
-                },  orderable: false, searchable: false
             },
         ]
         
@@ -99,6 +94,74 @@ $(document).ready(function () {
         })
     });
 
+    $("#pctable tbody").on("click", "a.editBtn", function (e) {
+        e.preventDefault();
+        var id = $(this).data('id');
+        $('#editPcModal').modal('show');
+    
+        $.ajax({
+            type: "GET",
+            url: "api/pcspec/" + id + "/edit",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            dataType: "json",
+            success: function(data){
+                   console.log(data);
+                   $("#name").val(data.fname + ' ' + data.lname);
+                   $("#ppc_id").val(data.pc_id);
+                   $("#pcustomer_id").val(data.customer_id);
+                   $("#pcpu").val(data.cpu);
+                   $("#pmotherboard").val(data.motherboard);
+                   $("#pgpu").val(data.gpu);
+                   $("#pram").val(data.ram);
+                   $("#phdd").val(data.hdd);
+                   $("#psdd").val(data.sdd);
+                   $("#ppsu").val(data.psu);
+                   $("#pcase").val(data.pc_case);
+                //    $("#ppimagePath").val(data.imagePath);
+                   //    .html(`<img src="storage/images/${data.uploads}" width="100" class="img-fluid img-thumbnail">`);
+                },
+                error: function(){
+                    console.log('AJAX load did not work');
+                    alert("error");
+                }
+            });
+        });//end edit fetch
+        
+        $("#updateBtnPc").on('click', function(e) {
+            e.preventDefault();
+            var id = $('#ppc_id').val();
+            var data = $('#editpcform')[0];
+            var formData = new FormData(data);
+            var table = $('#pctable').DataTable();
+            console.log(data);
+    
+            $.ajax({
+                type: "POST",
+                url: "api/pcspec/update/"+ id,
+                data: formData,
+                contentType: false,
+                processData: false,
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                dataType: "json",
+                success: function(data) {
+                    console.log(data);
+                    $('#editPcModal').modal("hide");
+
+                    if (data.error) {
+                        bootbox.alert(data.error)
+                    } else {
+                        window.location.reload();
+                        bootbox.alert(data.success)
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                    bootbox.alert(data.error)
+                }
+            });
+        });
 
     $("#pctable tbody").on("click", "a.deletebtn", function (e) {
         var table = $('#pctable').DataTable();

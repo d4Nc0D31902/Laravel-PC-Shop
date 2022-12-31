@@ -31,19 +31,38 @@ $(document).ready(function () {
             },
             {data: null,
                 render: function (data, type, row) {
-                    return "<a href='#' class='editBtn id='editbtn' data-id=" + data.product_id + "><i class='fa-solid fa-pen-to-square' aria-hidden='true' style='font-size:30px' ></i></a>";
+                    if(data.deleted_at)
+                    return "<span class='badge rounded-pill bg-secondary'>Not Available</span>";
+                    else
+                    return "<span class='badge rounded-pill bg-success'>Available</span>";
                 }, orderable: false, searchable: false
             },
             {data: null,
                 render: function (data, type, row) {
-                    return "<a href='#' class='deletebtn' data-id=" + data.product_id + "><i class='fa-sharp fa-solid fa-trash' style='font-size:30px; color:red'></a></i>";
-                },  orderable: false, searchable: false
+                    if(data.deleted_at)
+                    return "<i class='fa-solid fa-pen-to-square' aria-hidden='true' style='font-size:30px; color:gray'></i>";
+                    else
+                    return "<a href='#' class='editBtn id='editbtn' data-id=" + data.product_id + "><i class='fa-solid fa-pen-to-square' aria-hidden='true' style='font-size:30px' ></i></a>";
+                },
             },
             {data: null,
                 render: function (data, type, row) {
-                    return "<a href='#' class='restorebtn' data-id=" + data.product_id + "><i class='fa-solid fa-rotate-right' style='font-size:30px; color:red'></a></i>";
+                    if(data.deleted_at)
+                    return "<a href='#' class='restorebtn' data-id=" + data.product_id + "><i class='fa-solid fa-rotate-right' style='font-size:30px; color:primary'></a></i>";
+                    else 
+                    return "<a href='#' class='deletebtn' data-id=" + data.product_id + "><i class='fa-sharp fa-solid fa-trash' style='font-size:30px; color:red'></a></i>";
                 },  orderable: false, searchable: false
             },
+            // {data: null,
+            //     render: function (data, type, row) {
+            //         return "<a href='#' class='deletebtn' data-id=" + data.product_id + "><i class='fa-sharp fa-solid fa-trash' style='font-size:30px; color:red'></a></i>";
+            //     },  orderable: false, searchable: false
+            // },
+            // {data: null,
+            //     render: function (data, type, row) {
+            //         return "<a href='#' class='restorebtn' data-id=" + data.product_id + "><i class='fa-solid fa-rotate-right' style='font-size:30px; color:red'></a></i>";
+            //     },  orderable: false, searchable: false
+            // },
         ]
         
     })//end datatables
@@ -88,8 +107,7 @@ $("#ptable tbody").on("click", "a.editBtn", function (e) {
     e.preventDefault();
     var id = $(this).data('id');
     $('#editProductModal').modal('show');
-
-
+    
     $.ajax({
         type: "GET",
         url: "api/product/" + id + "/edit",
@@ -99,12 +117,14 @@ $("#ptable tbody").on("click", "a.editBtn", function (e) {
         dataType: "json",
         success: function(data){
                console.log(data);
+               $("#testing").val(data.name);
                $("#ppproduct_id").val(data.product_id);
                $("#ppname").val(data.name);
                $("#ppdescription").val(data.description);
                $("#pptype").val(data.type);
                $("#ppbrand").val(data.brand);
                $("#ppprice").val(data.price);
+               $("#ppquantity").val(data.quantity);
             //    $("#ppimagePath").val(data.imagePath);
                //    .html(`<img src="storage/images/${data.uploads}" width="100" class="img-fluid img-thumbnail">`);
             },
@@ -114,37 +134,6 @@ $("#ptable tbody").on("click", "a.editBtn", function (e) {
             }
         });
     });//end edit fetch
-    
-    // $("#updatebtnProduct").on('click', function(e) {
-    //     e.preventDefault();
-    //     var id = $('#ppproduct_id').val();
-    //     //var data = $("#updateItemform").serialize();
-    //     console.log(data);
-
-    //     var table = $('#ptable').DataTable();
-    //     var cRow = $("tr td:contains(" + id + ")").closest('tr');
-    //     var data = $("#proform").serialize();
-
-    //     $.ajax({    
-    //         type: "PUT",
-    //         url: "api/product/"+ id,
-    //         data: data,
-    //         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-    //         dataType: "json",
-    //         success: function(data) {
-    //             console.log(data);
-    //             // $('#editItemModal').each(function(){
-    //             //         $(this).modal('hide'); });
-
-    //             $('#editProductModal').modal("hide");
-    //             // window.location.reload();
-    //             table.row(cRow).data(data).invalidate().draw(false);
-    //         },
-    //         error: function(error) {
-    //             console.log(error);
-    //         }
-    //     });
-    // });
 
     $("#updatebtnProduct").on('click', function(e) {
         e.preventDefault();
@@ -167,6 +156,7 @@ $("#ptable tbody").on("click", "a.editBtn", function (e) {
                 $('#editProductModal').modal("hide");
                 window.location.reload();
                 // table.row(cRow).data(data).invalidate().draw(false);
+                bootbox.alert(data.success)
             },
             error: function(error) {
                 console.log(error);
@@ -207,14 +197,10 @@ $("#ptable tbody").on("click", "a.editBtn", function (e) {
                         dataType: "json",
                         success: function (data) {
                             console.log(data);
-                            // bootbox.alert('success');
-                            // $tr.find("td").fadeOut(2000, function () {
-                            //     $tr.remove();
-                            
-                            $row.fadeOut(4000, function(){
-                                table.row($row).remove().draw(false)
-                            });
-
+                            // $row.fadeOut(4000, function(){
+                            //     table.row($row).reload()
+                            // });
+                            window.location.reload();
                             bootbox.alert(data.success)
                         },
 
@@ -225,4 +211,53 @@ $("#ptable tbody").on("click", "a.editBtn", function (e) {
             },
         });
     });//DELETE
+
+    $("#ptable tbody").on("click", "a.restorebtn", function (e) {
+        var table = $('#ptable').DataTable();
+        var id = $(this).data('id');
+        var $row = $(this).closest('tr');
+        console.log(id);
+
+        e.preventDefault();
+        bootbox.confirm({
+            message: "Do you want to restore this product?",
+            buttons: {
+                confirm: {
+                    label: "Yes",
+                    className: "btn-success",
+                },
+                cancel: {
+                    label: "No",
+                    className: "btn-danger",
+                },
+            },
+            callback: function (result) {
+                if (result)
+                    $.ajax({
+                        type: "GET",
+                        url: "/api/product/restore/" + id,
+                        headers: {
+                            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                                "content"
+                            ),
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data);
+
+                            // $row.fadeOut(4000, function(){
+                            //     table.row($row).remove().draw(false)
+                            // });
+                            window.location.reload();
+
+                            bootbox.alert(data.success)
+                        },
+
+                        error: function (error) {
+                            console.log(error);
+                        },
+                    });
+            },
+        });
+    });//RESTORE
 });

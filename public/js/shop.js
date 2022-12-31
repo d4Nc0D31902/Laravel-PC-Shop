@@ -7,18 +7,16 @@ var clone = "";
 $(document).ready(function () {
     $.ajax({
         type: "GET",
-        url: "/api/product",
+        url: "/api/shop",
         dataType: 'json',
         success: function (data) {
             console.log(data);
             $.each(data, function (key, value) {
-                // console.log(key);
-               id = value.product_id;
-            //    var product = "<div class='product'><div class='productDetails'><div class='productImage'><img src=/storage/" + value.imagePath + " width='200px', height='430px'/></div><br><p class='productId'> Product ID: " + value.product_id + "</p><div class='productText'><p>Product Name: " + value.name + "</p></div><div class='productText'><p class='price-container'>Price: Php <span class='price'>" + value.price + "</span></p><p>Description: " + value.description + "</p></div><p>Quantity: <input type='number' class='qty' name='quantity' min='1' max='5'><p></p></p></div><button type='button' class='btn btn-primary add' >Add to cart</button></div>";
-               
-               var product = "<div class='product'><div class='productDetails'><div class='productImage'><img src="+"/storage/" + value.imagePath + " width='200px', height='200px'/></div><div class='productText'><p class='price-container'>Price: Php <span class='price'>" + value.price + "</span></p><p>" + value.description + "</p></div><input type='number' class='qty' name='quantity' min='1' max='5'></div><button type='button' class='btn btn-primary add' >Add to cart</button></div>";
-               $("#products").append(product);             // <img src="/storage/' + JsonResultRow.imagePath + '" width="100px" height="100px">';
+                id = value.product_id;
 
+                var product = "<div class='product'><div class='productDetails'><div class='productImage'><img src="+"/storage/" + value.imagePath + " width='200px', height='200px'/></div><div class='productText'><p class='price-container'>Price: Php <span class='price'>" + value.price + "</span></p><p>" + value.description + "</p></div><input type='number' class='qty' name='quantity' min='1' max='5'><p class='productId'>" + value.product_id + "</p>      </div><button type='button' class='btn btn-primary add' >Add to cart</button></div>";
+                
+                $("#products").append(product);             // <img src="/storage/' + JsonResultRow.imagePath + '" width="100px" height="100px">';
             });
 
         },

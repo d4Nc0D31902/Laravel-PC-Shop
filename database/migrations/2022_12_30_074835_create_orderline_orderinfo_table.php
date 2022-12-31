@@ -18,7 +18,7 @@ return new class extends Migration
                 $table->integer('customer_id')->unsigned();
                 $table->foreign('customer_id')->references('customer_id')->on('customers');
                 $table->date('date_placed');
-                $table->date('date_shipped');
+                $table->date('date_shipped')->nullable();
                 $table->text('status')->default('Processing');
             });
     

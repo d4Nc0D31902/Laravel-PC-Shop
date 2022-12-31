@@ -123,21 +123,14 @@ class PcspecController extends Controller
      */
     public function edit($id)
     {   
-        // if(Auth::check() && Auth::user->role == 'admin'){
+        // $pcspec = Pcspec::find($id);
 
-        // } 
-        // else{
-
-        // }
-        
-        $id = Auth::user()->employees->employee_id;
-
-        $employee = DB::table('employees')
-        ->join('users', 'users.id', '=', 'employees.user_id')
-        ->where('employees.employee_id', '=', $id)
+        $pcspec = DB::table('pcspecs')
+        ->join('customers', 'customers.customer_id', '=', 'pcspecs.customer_id')
+        ->where('pcspecs.pc_id', '=', $id)
         ->first();
 
-        return response()->json($employee);
+        return response()->json($pcspec);
     }
 
     /**
@@ -150,32 +143,26 @@ class PcspecController extends Controller
     public function update(Request $request, $id)
     {
         // if(Auth::check() && Auth::user->role == 'admin'){
-            $pcspec = Pcspec::find($id);
-            $pcspec->cpu = $request->cpu;
-            $pcspec->motherboard = $request->fname;
-            $pcspec->gpu = $request->gpu;
-            $pcspec->ram = $request->ram;
-            $pcspec->hdd = $request->hdd;
-            $pcspec->sdd = $request->sdd;
-            $pcspec->psu = $request->psu;
-            $pcspec->pc_case = $request->pc_case;
+        $pcspec = Pcspec::find($id);
+        $pcspec->cpu = $request->cpu;
+        $pcspec->motherboard = $request->motherboard;
+        $pcspec->gpu = $request->gpu;
+        $pcspec->ram = $request->ram;
+        $pcspec->hdd = $request->hdd;
+        $pcspec->sdd = $request->sdd;
+        $pcspec->psu = $request->psu;
+        $pcspec->pc_case = $request->pc_case;
 
-            if($files = $request->hasFile('uploads')) {
-            $files = $request->file('uploads');
-            $pcspec->imagePath = 'images/'.$files->getClientOriginalName();
+        if($files = $request->hasFile('uploads')) {
+        $files = $request->file('uploads');
+        $pcspec->imagePath = 'images/'.$files->getClientOriginalName();
+        $pcspec->update();
+        Storage::put('/public/images/'.$files->getClientOriginalName(),file_get_contents($files));   
+        } else {
             $pcspec->update();
-            Storage::put('/public/images/'.$files->getClientOriginalName(),file_get_contents($files));   
-            } else {
-                $pcspec->update();
-            }
-
-            return response()->json(["success" => "Pc-Spec updated successfully.","pcspec" => $pcspec ,"status" => 200]);
-        // } 
-        // else{
-        //     return response()->json(["error" => "Only admin can update the pcspec","pcspec" => $pcspec ,"status" => 200]);
-
-        //     return response()->json(['errors'=>$validator->errors()->all()]);
-        // }
+        }
+        
+        return response()->json(["success" => "Pc-Spec updated successfully.","pcspec" => $pcspec ,"status" => 200]);
     }
 
     /**

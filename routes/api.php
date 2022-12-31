@@ -18,7 +18,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Customer
+//middleware for cruds with sanctum
 Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::resource('customer', 'CustomerController');
   Route::view('/customer-index', 'customer.index');
@@ -32,19 +32,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::resource('employee', 'EmployeeController');
   Route::view('/employee-index', 'employee.index');
   Route::post('/employee/update/{id}',['uses' => 'EmployeeController@update','as' => 'employee.update']);
-
   Route::get('/employee/role/{id}/edit',['uses' => 'EmployeeController@editRole','as' => 'employee.editRole']);
   Route::post('/employee/update/role/{id}',['uses' => 'EmployeeController@updateRole','as' => 'employee.updateRole']);
-
-  Route::get('/employee/restore/{id}',[
-    'uses' => 'EmployeeController@restore',
-    'as' => 'employee.restore'
-  ]);
+  Route::get('/employee/restore/{id}',['uses' => 'EmployeeController@restore','as' => 'employee.restore']);
 
   // Product
   Route::resource('product', 'ProductController');
   Route::post('/product/update/{id}',['uses' => 'ProductController@update','as' => 'product.update']);
+  Route::get('/product/restore/{id}',['uses' => 'ProductController@restore','as' => 'product.restore']);
   Route::view('/product-index', 'product.index');
+  
 
   // Pcspecs
   // Route::get('/pcspec-index', ['uses' => 'PcspecController@getPcspecAll', 'as' => 'pcspec.getPcspecAll']);
@@ -52,24 +49,37 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::view('/pcspec-index', 'pcspec.index');
   Route::post('/pcspec/update/{id}',['uses' => 'PcspecController@update','as' => 'pcspec.update']);
 
+  // consultation
   Route::resource('consultation', 'ConsultationController');
   Route::view('/consultation-index', 'consultation.index');
-});
+}); //end of middleware of cruds
 
-// // middleware for customer
-// Route::group(['middleware' => ['auth:sanctum', 'role:customer,admin,employee']], function () {
-//   Route::resource('customer', 'CustomerController')->only(['edit','update']);
-//   Route::post('/customer/update/{id}',['uses' => 'CustomerController@update','as' => 'customer.update']);
-// });
-
+// middleware for guest
 Route::group(['middleware' => 'guest'], function() {
   Route::resource('customer', 'CustomerController')->only(['store']);
   Route::resource('employee', 'EmployeeController')->only(['store']);
-});
+}); //end of guest
 
+//middleware for customer, employee and admin
 Route::group(['middleware' => ['auth:sanctum', 'role:customer,employee,admin']], function () {
   Route::resource('pcspec', 'PcspecController')->only(['store']);
-});
+  Route::post('/product/checkout',['uses' => 'ProductController@postCheckout','as' => 'checkout']);
+  
+  //for profiles
+  Route::get('/profile/index', [
+    'uses' => 'UserController@getProfile',
+    'as' => 'getProfile.customer',
+  ]);
+
+  Route::view('/profile', 'profile.customer');
+  //end of profile
+
+}); // end of middleware
+
+Route::get('/shop', [
+  'uses' => 'ProductController@shop',
+  'as' => 'shop.index',
+]);
 
 Route::get('signin', [
   'uses' => 'LoginController@index',
@@ -86,28 +96,27 @@ Route::get('logout',[
   'as' => 'login.logout',
 ]);
 
-// Route::get('/profile', [
-//   'uses' => 'UserController@profile',
-//   'as' => 'profile.customer',
-// ]);
 Route::view('/pcspec-all', 'pcspec.index');
 Route::get('/getAll', [
   'uses' => 'PcspecController@getAll',
   'as' => 'getAll.index',
 ]);
 
-Route::get('/profile/index', [
-  'uses' => 'UserController@getProfile',
-  'as' => 'getProfile.customer',
-]);
-
-Route::view('/profile', 'profile.customer');
-
 Route::view('/homepage', 'homepage.index');
 
-Route::view('/shop-index', 'shop.index');
-Route::post('/product/checkout',['uses' => 'ProductController@postCheckout','as' => 'checkout']);
+Auth::routes(['verify' => true]);
+
+
+// // middleware for customer
+// Route::group(['middleware' => ['auth:sanctum', 'role:customer,admin,employee']], function () {
+//   Route::resource('customer', 'CustomerController')->only(['edit','update']);
+//   Route::post('/customer/update/{id}',['uses' => 'CustomerController@update','as' => 'customer.update']);
+// });
 
 // Route::resource('user', 'UserController');
 // Route::view('/profile', 'profile.customer');
-Auth::routes(['verify' => true]);
+
+// Route::get('/profile', [
+//   'uses' => 'UserController@profile',
+//   'as' => 'profile.customer',
+// ]);

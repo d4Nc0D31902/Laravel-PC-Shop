@@ -1,6 +1,8 @@
 @extends('layouts.base')
 @section('body')
 
+<h1 class="display-6 fw-bold">Product CRUD</h1>
+<div class="container-fluid py-4 bg-light rounded-3 shadow-sm">
 <div class="container">
     <div class="table-responsive">
         <table id="ptable" class="table table-striped table-hover">
@@ -13,15 +15,16 @@
                     <th>Brand</th>
                     <th>Price</th>
                     <th>Image</th>
+                    <th>Status</th>
                     <th>Edit</th>
-                    <th>Delete</th>
-                    <th>Restore</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody id="pbody">
             </tbody>
         </table>
     </div>
+</div>
 </div>
 
 {{-- start of create --}}
@@ -64,7 +67,12 @@
                             <input type="text" class="form-control" placeholder="Ex. GPU" id="ptype" name="type">
                         </div>  
                     </div>
-
+                    <div class="row mt-2">
+                        <div class="col">
+                            <label for="pprice" class="control-label">Stock</label>
+                            <input type="text" class="form-control" placeholder="Insert stock here..." id="pquantity" name="quantity">
+                        </div>
+                    </div>
                     <div class="row mt-2">
                         <div class="col">
                             <label for="imagePath" class="control-label">Product Picture</label>
@@ -117,14 +125,14 @@
                     </div>
                 
                     <div class="form-group">
-                        <label for="pptype" class="control-label"><i class="fa-regular fa-note-sticky"></i> Type</label>
+                        <label for="pptype" class="control-label"></i> Type</label>
                         <input type="text" class="form-control " id="pptype" name="type" >
                     </div>
-                
-                    {{-- <div class="form-group"> 
-                        <label for="eeimagePath" class="control-label"><i class="fa-regular fa-image"></i>  Image</label>
-                        <input type="file" class="form-control" id="eeimagePath" name="imagePath" >
-                    </div> --}}
+
+                    <div class="form-group">
+                        <label for="ppquantity" class="control-label"></i> Quantity</label>
+                        <input type="text" class="form-control " id="ppquantity" name="quantity" >
+                    </div>
                     
                     <div class="form-group">
                         <label for="ppimagePath" class="control-label"><i class="fa-regular fa-image"></i>  Image</label>

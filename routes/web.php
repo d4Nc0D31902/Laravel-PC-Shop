@@ -17,33 +17,45 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//middleware for cruds
 Route::group(['middleware' => ['auth:sanctum',  'role:admin,employee']], function () {
+    //customer
     Route::resource('customer', 'CustomerController');
     Route::view('/customer', 'customer.index');
 
+    //employee
     Route::resource('employee', 'EmployeeController');
     Route::view('/employee', 'employee.index');
 
+    //product
     Route::resource('product', 'ProductController');
     Route::view('/product', 'product.index');
 
+    //pcspec
     Route::resource('pcspec', 'PcspecController');
     Route::get('/pcspec', ['uses' => 'PcspecController@index']);
+    Route::view('/pcspec-all', 'pcspec.index');
 
+    //consultation
     Route::resource('consultation', 'ConsultationController');
     Route::get('/consultation', ['uses' => 'ConsultationController@index']);
-});
+}); //end of cruds
 
-Route::view('/pcspec-all', 'pcspec.index');
-
-Route::group(['middleware' => ['auth:sanctum', 'role:customer']], function () {
+//middleware for customer
+Route::group(['middleware' => ['auth:sanctum', 'role:customer,employee,admin']], function () {
     Route::resource('customer', 'CustomerController')->only(['edit', 'update']);
-});
+    Route::view('/profile', 'profile.customer');
+}); //end of customer
 
-// Route::group(['middleware' => 'guest'], function() {
-//     Route::resource('customer', 'CustomerController');
-//     Route::resource('employee', 'EmployeeController');
-// });
+Route::get('signin', [
+    'uses' => 'LoginController@index',
+    'as' => 'user.signin',
+]);
+
+
+Route::resource('shop', 'ProductController');
+Route::view('/shop', 'shop.index');
+
 
 // Route::group(['prefix' => 'user'], function() {
 //   Route::group(['middleware' => 'guest'], function() {
@@ -53,11 +65,6 @@ Route::group(['middleware' => ['auth:sanctum', 'role:customer']], function () {
 //     ]);
 //   });
 // });
-
-Route::resource('shop', 'ProductController');
-Route::view('/shop', 'shop.index');
-
-Route::view('/profile', 'profile.customer');
 
 // Route::get('/profile', [
 //     'uses' => 'UserController@profile',
@@ -71,10 +78,6 @@ Route::view('/profile', 'profile.customer');
 
 // Route::view('/profile', 'profile.customer');
 
-Route::get('signin', [
-          'uses' => 'LoginController@index',
-          'as' => 'user.signin',
-      ]);
 Auth::routes(['verify' => true]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

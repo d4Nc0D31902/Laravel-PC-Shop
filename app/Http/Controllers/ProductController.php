@@ -31,7 +31,7 @@ class ProductController extends Controller
     {
         if ($request->ajax())
         {
-            $products = Product::orderBy('product_id','DESC')->get();
+            $products = Product::withTrashed()->orderBy('product_id','DESC')->get();
 
             // $products = Product::search(request('search'))->paginate();
             return response()->json($products);
@@ -65,6 +65,12 @@ class ProductController extends Controller
         $files = $request->file('uploads');
         $product->imagePath = 'images/'.$files->getClientOriginalName();
         $product->save();
+
+        $stock = new Stock;
+        $stock->product_id = $product->product_id;
+        $stock->quantity = $request->quantity;
+        $stock->save();
+
         Storage::put('/public/images/'.$files->getClientOriginalName(),file_get_contents($files));
 
         return response()->json(["success" => "Product created successfully.","product" => $product ,"status" => 200]);
@@ -89,7 +95,13 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $product = Product::find($id);
+        // $product = Product::find($id);
+
+        $product = DB::table('products')
+        ->join('stock', 'stock.product_id', '=', 'products.product_id')
+        ->where('products.product_id', '=', $id)
+        ->first();
+
         return response()->json($product);
     }
 
@@ -108,14 +120,21 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->brand = $request->brand;
         $product->type = $request->type;
-        // $files = null;
-        $files = $request->file('uploads');
-        $product->imagePath = 'images/'.$files->getClientOriginalName();
-        $product->update();
-        Storage::put('/public/images/'.$files->getClientOriginalName(),file_get_contents($files));
         
-        // return response()->json($product);
-        return response()->json($product);
+        if($files = $request->hasFile('uploads')) {
+            $files = $request->file('uploads');
+            $product->imagePath = 'images/'.$files->getClientOriginalName();
+            $product->update();
+            Storage::put('/public/images/'.$files->getClientOriginalName(),file_get_contents($files));   
+        } else {
+            $product->update();
+        }
+
+        $stock = Stock::find($product->product_id);
+        $stock->quantity = $request->quantity;
+        $stock->update();
+        
+        return response()->json(["success" => "Product updated successfully!","status" => 200, $product]);
     }
 
     /**
@@ -128,7 +147,30 @@ class ProductController extends Controller
     {
         $products = Product::findOrFail($id);
         $products->delete();
+
+        $stock = Stock::findOrFail($id);
+        $stock->delete();
         return response()->json(["success" => "Product Deleted Successfully!","status" => 200]);
+    }
+
+    public function restore($id) {
+        $products = Product::withTrashed()->findOrFail($id);
+        $products->restore();
+
+        $stock = Stock::withTrashed()->findOrFail($id);
+        $stock->restore();
+        
+        return response()->json(["success" => "Product has been Restored!","status" => 200]);
+    }
+
+    public function shop(Request $request)
+    {
+        if ($request->ajax())
+        {
+            $products = Product::orderBy('product_id','DESC')->get();
+
+            return response()->json($products);
+        }
     }
 
     public function postCheckout(Request $request)
