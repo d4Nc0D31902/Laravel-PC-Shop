@@ -14,8 +14,11 @@ $(document).ready(function () {
             $.each(data, function (key, value) {
                 id = value.product_id;
 
-                var product = "<div class='product'><div class='productDetails'><div class='productImage'><img src="+"/storage/" + value.imagePath + " width='200px', height='200px'/></div><div class='productText'><p class='price-container'>Price: Php <span class='price'>" + value.price + "</span></p><p>" + value.description + "</p></div><input type='number' class='qty' name='quantity' min='1' max='5'><p class='productId'>" + value.product_id + "</p>      </div><button type='button' class='btn btn-primary add' >Add to cart</button></div>";
-                
+                // var product = "<div class='product'><div class='productDetails'><div class='productImage'><img src="+"/storage/" + value.imagePath + " width='200px', height='200px'/></div><div class='productText'><p class='price-container'>Price: Php <span class='price'>" + value.price + "</span></p><p>" + value.description + "</p></div><input type='number' class='qty' name='quantity' min='1' max='5'><p class='productId'>" + value.product_id + "</p>      </div><button type='button' class='btn btn-primary add' >Add to cart</button></div>";
+
+                var product = "<div class='col'><div class='productDetails'><div class='card'><div class='productImage'><img src="+"/storage/" + value.imagePath + " width='200px', height='200px'/></div><div class='productText'><strong>"+ value.name +"</strong><p class='price-container'><strong>Price:</strong> ₱<span class='price'>" + value.price + "</span></p><p><strong>Description: </strong>" + value.description + "</p></div><p><strong>Quantity: </strong><input type='number' class='qty' name='quantity' min='1' max='5'></p><p class='productId' hidden>" + value.product_id + "</p></div></div><button type='button' class='btn btn-primary add' >Add to cart</button></div>";
+
+                // var product = "<div><div class='col'><div class='productDetails'><div class='card'><div class='productImage'><img src="+"/storage/" + value.imagePath + " class='card-img-top' alt='Hollywood Sign on The Hill'/></div><div class='card-body'><h5 class='card-title'>" + value.name +"</h5><p class='price-container'><strong>Price:</strong> $<span class='price'>" + value.price + "</span></p></p><p class='card-text'>Descriptiop: " + value.description + "</p><p>Quantity: <input type='number' class='qty' name='quantity' min='1' max='5'></p></div></div><p class='productId'>" + value.product_id + "</p><button type='button' class='btn btn-primary add' >Add to cart</button></div></div>";
                 $("#products").append(product);             // <img src="/storage/' + JsonResultRow.imagePath + '" width="100px" height="100px">';
             });
 
@@ -96,8 +99,33 @@ $(document).ready(function () {
                 processData: false,
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
-                    console.log(data);
-                    alert(data.status);
+                    if(data.error){
+                        console.log(data);
+                        
+                        $('#shoppingCart').hide();
+
+                        bootbox.alert(data.error);
+
+                        setTimeout(function(){
+                            window.location.href = "/signin";
+                         }, 1000);
+
+                    } else{
+                        console.log(data);
+
+                        $('#shoppingCart').hide();
+
+                        let dialog = bootbox.dialog({
+                            title: 'Order Status',
+                            message: '<p><i class="fas fa-spin fa-spinner"></i> Please wait your order is processing.</p>'
+                        });
+
+                        dialog.init(function() {
+                            setTimeout(function() {
+                                dialog.find('.bootbox-body').html(data.status);
+                            }, 3000);
+                        });
+                    }
                 },
                 error: function (_error) {
                     alert(data.status);

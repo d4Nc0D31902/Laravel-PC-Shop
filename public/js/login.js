@@ -24,12 +24,26 @@ $(document).ready(function(){
             success: function(data) {
                 console.log(data);
                 // table.row(cRow).data(data).invalidate().draw(false);
-                bootbox.alert(data.success)
-                setTimeout(function(){
-                    window.location.href = "/profile";
-                 }, 1000);
-                // window.location.href = "/profile";
-                // window.location.reload();
+
+                if (data.errors) {
+                    bootbox.alert({
+                        message: data.errors,
+                        className: 'rubberBand animated'});
+                    // setTimeout(function(){
+                    //     window.location.href = "/profile";
+                    //  }, 1000);
+                    // window.location.href = "/profile";
+                    // window.location.reload();   
+                } else{
+                    bootbox.alert({
+                        message: data.success,
+                        className: 'rubberBand animated'
+                    });
+
+                    setTimeout(function(){
+                            window.location.href = "/profile";
+                    }, 1000);
+                }
             },
             error: function(error) {
                 console.log(error);

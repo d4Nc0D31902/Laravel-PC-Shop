@@ -158,8 +158,8 @@ class EmployeeController extends Controller
         }
         
         $user = User::find($employee->user_id);
+        $user->name = $request->fname . ' ' . $request->lname;
         if(!empty($request->input('email')) and !empty($request->input('password'))){
-            $user->name = $request->fname . ' ' . $request->lname;
             $user->email = $request->email;
             $user->password = bcrypt($request->input('password'));
             $user->update();
@@ -170,10 +170,10 @@ class EmployeeController extends Controller
             $user->password = bcrypt($request->input('password'));
             $user->update();
         } else{
-
+            $user->update();   
         }
 
-        return response()->json([$employee, $user]);
+        return response()->json(["success" => "Account updated successfully.", $employee, $user]);
     } 
 
     public function updateRole(Request $request, $id)

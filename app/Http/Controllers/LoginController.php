@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Auth;
 use View;
+use Validator;
 
 class LoginController extends Controller
 {   
@@ -27,10 +28,14 @@ class LoginController extends Controller
 
     public function postSignin(Request $request){
         
-        $this->validate($request, [
+        $validator = \Validator::make($request->all(), [
             'email' => 'email| required',
             'password' => 'required| min:4'
         ]);
+
+        if($validator->fails()){
+            return response()->json(['errors'=>$validator->errors()->all()]);
+        }
 
         if(auth()->attempt(array('email' => $request->email, 'password' => $request->password))) {
 
@@ -50,7 +55,7 @@ class LoginController extends Controller
         }
         else{
             // return redirect()->route('user.signin')->with('error','Email-Address And Password Are Wrong.');
-            return response()->json(["error" => "Email-Address And Password Are Wrong."]);
+            return response()->json(["errors" => "Email-Address or Password Are Wrong."]);
         }
      }
      

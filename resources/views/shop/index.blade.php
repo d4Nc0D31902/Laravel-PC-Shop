@@ -2,7 +2,7 @@
 @section('body')
 
 
-<h5>Your Shopping Cart</h5>
+<h5>Computer Shop Online</h5>
     <div id="cart-container">
       <div id="cart">
       <i class="fa fa-shopping-cart openCloseCart" style="font-size:20px" aria-hidden="true"></i> 
@@ -30,8 +30,12 @@
   	</ul>
   </nav>
   
-  <div class="container container-fluid" id="products"> 
-  	
+  <div class="container-fluid py-4 bg-light rounded-3 shadow-sm">
+  <br>
+  <div class="row row-cols-1 row-cols-md-3 g-4" id="products"> 
+    
   </div>
-
+  </div>
+ 
+  <br>
 @endsection

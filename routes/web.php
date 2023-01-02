@@ -39,6 +39,21 @@ Route::group(['middleware' => ['auth:sanctum',  'role:admin,employee']], functio
     //consultation
     Route::resource('consultation', 'ConsultationController');
     Route::get('/consultation', ['uses' => 'ConsultationController@index']);
+
+    Route::get('/dashboard/title-chart',[
+        'uses' => 'DashboardController@titleChart',
+        'as' => 'dashboard.titleChart'
+    ]);
+    Route::get('/dashboard/sales-chart',[
+        'uses' => 'DashboardController@salesChart',
+        'as' => 'dashboard.salesChart'
+    ]);
+    Route::get('/dashboard/products-chart',[
+        'uses' => 'DashboardController@productsChart',
+        'as' => 'dashboard.productsChart'
+    ]);
+
+    Route::view('/dashboard','dashboard.index');
 }); //end of cruds
 
 //middleware for customer
@@ -46,6 +61,7 @@ Route::group(['middleware' => ['auth:sanctum', 'role:customer,employee,admin']],
     Route::resource('customer', 'CustomerController')->only(['edit', 'update']);
     Route::view('/profile', 'profile.customer');
 }); //end of customer
+
 
 Route::get('signin', [
     'uses' => 'LoginController@index',

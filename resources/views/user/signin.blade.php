@@ -7,6 +7,7 @@
   <p>Please login your account</p>
 @endif --}}
 
+
 <section class="vh-100">
     <div class="container py-5 h-20">
       <div class="row d-flex justify-content-center align-items-center h-100">
@@ -25,9 +26,9 @@
                       <i class="fa fa-american-sign-language-interpreting fa-2x me-3" style="color: #8800ff;"></i>
                       <span class="h1 fw-bold mb-0">M.W Computer Shop</span>
                     </div>
-  
+                    
                     <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign into your account</h5>
-  
+                    <div class="alert alert-danger" role="alert" style="display:none"></div>
                     <div class="form-outline mb-4">
                       <input type="email" id="email" name="email" class="form-control form-control-lg" />
                       <label class="form-label" for="form2Example17">Email address</label>

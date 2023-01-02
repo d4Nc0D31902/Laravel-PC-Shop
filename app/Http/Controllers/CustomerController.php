@@ -178,7 +178,7 @@ class CustomerController extends Controller
             $user->password = bcrypt($request->input('password'));
             $user->update();
         } else{
-
+            $user->update();  
         }
 
         return response()->json($customer);

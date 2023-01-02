@@ -175,29 +175,30 @@ class ProductController extends Controller
 
     public function postCheckout(Request $request)
     {
-        $products = json_decode($request->getContent(),true);
-        Log::info(print_r($products, true));
+        if(!Auth::check()){
+            return response()->json(["error" => "Please login first.", "status" => 200]);
+        } else{
+            $products = json_decode($request->getContent(),true);
+            Log::info(print_r($products, true));
         
         try {
             DB::beginTransaction();
+            
             $order = new Order();
             $order->date_placed = Carbon::now();
-            // $customer = Customer::find(1);
+
             $cusid = Auth::user()->customers->customer_id;
             $customer = Customer::find($cusid);
             $customer->orders()->save($order);
-            //  dd($cart->products);
-            // Log::info(print_r($order->orderinfo_id, true));
+
             foreach($products as $product) {
                $id = $product['product_id'];
                $order->products()->attach($order->orderinfo_id,['quantity'=> $product['quantity'],'product_id'=>$id]);
-            //    Log::info(print_r($order, true));
                $stock = Stock::find($id);
                $stock->quantity = $stock->quantity - $product['quantity'];
                $stock->save();
             }
           }
-          
             catch (\Exception $e) {
             DB::rollback();
               return response()->json(array('status' => 'Order Failed','code'=>409,'error'=>$e->getMessage()));
@@ -205,5 +206,7 @@ class ProductController extends Controller
       
             DB::commit();
             return response()->json(array('status' => 'Order Success','code'=>200 , 'order id'=>$order,'stock'=>$order));
+        }
+    
     }//end postcheckout
 }

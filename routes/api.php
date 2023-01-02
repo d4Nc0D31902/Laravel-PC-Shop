@@ -19,7 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 //middleware for cruds with sanctum
-Route::group(['middleware' => ['auth:sanctum']], function () {
+Route::group(['middleware' => ['auth:sanctum', 'role:employee,admin']], function () {
   Route::resource('customer', 'CustomerController');
   Route::view('/customer-index', 'customer.index');
   Route::post('/customer/update/{id}',['uses' => 'CustomerController@update','as' => 'customer.update']);
@@ -52,18 +52,43 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   // consultation
   Route::resource('consultation', 'ConsultationController');
   Route::view('/consultation-index', 'consultation.index');
+
+  // dashboard chart
+  Route::get('/dashboard/title-chart',[
+    'uses' => 'DashboardController@titleChart',
+    'as' => 'dashboard.titleChart'
+  ]);
+  Route::get('/dashboard/sales-chart',[
+    'uses' => 'DashboardController@salesChart',
+    'as' => 'dashboard.salesChart'
+  ]);
+  Route::get('/dashboard/products-chart',[
+    'uses' => 'DashboardController@productsChart',
+    'as' => 'dashboard.productsChart'
+  ]);
+  
+  Route::view('/dashboard','dashboard.index');
 }); //end of middleware of cruds
 
 // middleware for guest
 Route::group(['middleware' => 'guest'], function() {
   Route::resource('customer', 'CustomerController')->only(['store']);
   Route::resource('employee', 'EmployeeController')->only(['store']);
+
+  Route::get('signin', [
+    'uses' => 'LoginController@index',
+    'as' => 'user.signin',
+  ]);
+
+  Route::post('signin', [
+      'uses' => 'LoginController@postSignin',
+      'as' => 'user.signin',
+  ]);
 }); //end of guest
 
 //middleware for customer, employee and admin
 Route::group(['middleware' => ['auth:sanctum', 'role:customer,employee,admin']], function () {
   Route::resource('pcspec', 'PcspecController')->only(['store']);
-  Route::post('/product/checkout',['uses' => 'ProductController@postCheckout','as' => 'checkout']);
   
   //for profiles
   Route::get('/profile/index', [
@@ -73,28 +98,20 @@ Route::group(['middleware' => ['auth:sanctum', 'role:customer,employee,admin']],
 
   Route::view('/profile', 'profile.customer');
   //end of profile
-
 }); // end of middleware
+
+Route::post('/product/checkout',['uses' => 'ProductController@postCheckout','as' => 'checkout']);
+
+Route::get('logout',[
+  'uses' => 'LoginController@logout',
+  'as' => 'login.logout',
+]);
 
 Route::get('/shop', [
   'uses' => 'ProductController@shop',
   'as' => 'shop.index',
 ]);
 
-Route::get('signin', [
-  'uses' => 'LoginController@index',
-  'as' => 'user.signin',
-]);
-
-Route::post('signin', [
-    'uses' => 'LoginController@postSignin',
-    'as' => 'user.signin',
-]);
-
-Route::get('logout',[
-  'uses' => 'LoginController@logout',
-  'as' => 'login.logout',
-]);
 
 Route::view('/pcspec-all', 'pcspec.index');
 Route::get('/getAll', [
