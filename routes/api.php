@@ -67,6 +67,11 @@ Route::group(['middleware' => ['auth:sanctum', 'role:employee,admin']], function
     'as' => 'dashboard.productsChart'
   ]);
   
+  Route::get('/dashboard/dates-chart',[
+    'uses' => 'DashboardController@datesChart',
+    'as' => 'dashboard.datesChart'
+  ]);
+  
   Route::view('/dashboard','dashboard.index');
 }); //end of middleware of cruds
 
@@ -76,18 +81,18 @@ Route::group(['middleware' => 'guest'], function() {
   Route::resource('employee', 'EmployeeController')->only(['store']);
 
   Route::get('signin', [
-    'uses' => 'LoginController@index',
+'uses' => 'LoginController@index',
     'as' => 'user.signin',
   ]);
 
-  Route::post('signin', [
-      'uses' => 'LoginController@postSignin',
-      'as' => 'user.signin',
-  ]);
+
+  Route::post('signin', ['uses' => 'LoginController@postSignin','as' => 'user.signin',]);
 }); //end of guest
 
 //middleware for customer, employee and admin
 Route::group(['middleware' => ['auth:sanctum', 'role:customer,employee,admin']], function () {
+  Route::resource('customer', 'CustomerController')->only(['edit', 'update']);
+  Route::post('/customer/update/{id}',['uses' => 'CustomerController@update','as' => 'customer.update']);
   Route::resource('pcspec', 'PcspecController')->only(['store']);
   
   //for profiles

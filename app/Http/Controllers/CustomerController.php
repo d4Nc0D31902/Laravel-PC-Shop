@@ -86,7 +86,7 @@ class CustomerController extends Controller
 
         if($file = $request->hasFile('uploads')) {
         	$customer = new Customer;
-        	$customer->user_id = $user->id;
+        	    
         	$customer->title = $request->title;
         	$customer->fname = $request->fname;
         	$customer->lname = $request->lname;

@@ -36,8 +36,8 @@ class DashboardController extends Controller
     public function productsChart() {
         $products = DB::table('products as i')
                     ->join('orderline as ol', 'i.product_id', '=', 'ol.product_id')
-                    ->select(DB::raw('i.description as products, sum(ol.quantity) as total'))
-                    ->groupBy('i.description')
+                    ->select(DB::raw('i.name as products, sum(ol.quantity) as total'))
+                    ->groupBy('i.name')
                     ->pluck('total','products')
                     ->all();
                     
@@ -45,6 +45,24 @@ class DashboardController extends Controller
         $labels = (array_keys($products));
         
         $data= array_values($products);
+        // dd($sales, $data, $labels);
+        return response()->json(array('data' => $data, 'labels' => $labels));
+    }
+
+    public function datesChart() {
+        
+        $dates = DB::table('products as i')
+                    ->join('orderline as ol', 'i.product_id', '=', 'ol.product_id')
+                    ->join('orderinfo as oi', 'ol.orderinfo_id', '=', 'oi.orderinfo_id')
+                    ->select(DB::raw('date(oi.date_placed) as month, sum(ol.quantity) as total'))
+                    ->groupBy('oi.date_placed')
+                    ->pluck('total','month')
+                    ->all();
+                    
+        // dd($sales);
+        $labels = (array_keys($dates));
+        
+        $data= array_values($dates);
         // dd($sales, $data, $labels);
         return response()->json(array('data' => $data, 'labels' => $labels));
     }

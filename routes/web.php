@@ -18,7 +18,7 @@ Route::get('/', function () {
 });
 
 //middleware for cruds
-Route::group(['middleware' => ['auth:sanctum',  'role:admin,employee']], function () {
+Route::group(['middleware' => ['auth:sanctum', 'role:employee,admin']], function () {
     //customer
     Route::resource('customer', 'CustomerController');
     Route::view('/customer', 'customer.index');
@@ -53,6 +53,11 @@ Route::group(['middleware' => ['auth:sanctum',  'role:admin,employee']], functio
         'as' => 'dashboard.productsChart'
     ]);
 
+    Route::get('/dashboard/dates-chart',[
+        'uses' => 'DashboardController@datesChart',
+        'as' => 'dashboard.datesChart'
+      ]);
+      
     Route::view('/dashboard','dashboard.index');
 }); //end of cruds
 

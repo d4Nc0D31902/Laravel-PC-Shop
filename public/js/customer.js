@@ -112,7 +112,7 @@ $(document).ready(function () {
             {data: null,
                 render: function (data,type,JsonResultRow,row) {
                     return '<img src="/storage/' + JsonResultRow.imagePath + '" width="100px" height="100px">';
-                }, orderable: false, searchable: false
+                },
             },
             // {data: null,
             //     render: function (data, type, row) {

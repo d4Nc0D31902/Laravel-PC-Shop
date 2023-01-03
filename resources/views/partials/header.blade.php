@@ -63,10 +63,10 @@
               @endif
               {{ Auth::user()->name }}</a>
               <ul class="dropdown-menu" aria-labelledby="dropdown09">
-                <li><a class="dropdown-item" href="{{ url('/profile') }}">My Account</a></li>
+                <li><a class="dropdown-item" href="{{ url('/profile') }}"><i class="fa-regular fa-user"></i> My Account</a></li>
             {{-- <a class="nav-link" href=""><img class="img-circle" src="{{ asset(Auth::user()->employees->imagePath) }}">Profile</a> --}}
               <li>
-                <a class="dropdown-item" href="{{ route('login.logout') }}" id="logoutbtnSubmit">Logout</a>
+                <a class="dropdown-item" href="{{ route('login.logout') }}" id="logoutbtnSubmit"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
               </li>
           </ul>
           </li>

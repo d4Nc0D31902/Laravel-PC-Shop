@@ -37,9 +37,14 @@ class LoginController extends Controller
             return response()->json(['errors'=>$validator->errors()->all()]);
         }
 
-        if(auth()->attempt(array('email' => $request->email, 'password' => $request->password))) {
+        if (Auth::attempt([
+            'email' => $request->email,
+            'password' => $request->password,
+        ])) {
 
-            $user = User::where('email', $request->email)->first();
+            $email = $request->email;
+
+            $user = User::where('email', $email)->first();
             
             $authToken = $user->createToken('auth-token')->plainTextToken;
             

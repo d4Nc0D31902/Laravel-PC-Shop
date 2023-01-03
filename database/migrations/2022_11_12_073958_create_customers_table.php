@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->increments('customer_id');
             $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->text('title');
             $table->text('lname');
             $table->text('fname');

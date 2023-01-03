@@ -132,4 +132,44 @@ $(document).ready(function () {
             console.log(error);
         }
     });
+
+    $.ajax({
+        type: "GET",
+        url: "/api/dashboard/dates-chart",
+        dataType: "json",
+        success: function (data) {
+            console.log(data);
+            var ctx = document.getElementById("datesChart");
+            var myBarChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Orders-Quantity Date',
+                        data: data.data,
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(255, 99, 132, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255,99,132,1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                      y: {
+                        beginAtZero: true
+                      }
+                    }
+                  },
+            });
+            
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
 });
