@@ -46,32 +46,38 @@ class LoginController extends Controller
 
             $user = User::where('email', $email)->first();
             
-            $authToken = $user->createToken('auth-token')->plainTextToken;
-            
             if (auth()->user()->role === 'employee') {
-                return response()->json(['access_token' => $authToken, "success" => "Employee Login Successfully!","status" => 200 ]);
+                //employee login
+                $authToken = $user->createToken('api-auth-token', ['worker'])->plainTextToken;
+                return response()->json(['access_token' => $authToken, "success" => "Employee Login Successfully!", "status" => 200 ]);
             } 
             else if (auth()->user()->role === 'admin'){
-                return response()->json(['access_token' => $authToken, "success" => "Admin Login Successfully!","status" => 200 ]);
+                //admin login
+                $authToken = $user->createToken('api-auth-token', ['worker'])->plainTextToken;
+                return response()->json(['access_token' => $authToken, "success" => "Admin Login Successfully!", "status" => 200 ]);
             }  
             else {
-                return response()->json(['access_token' => $authToken, "success" => "Customer Login Successfully!","status" => 200]);
+                //customer login
+                $authToken = $user->createToken('api-auth-token', ['customer'])->plainTextToken;
+                return response()->json(['access_token' => $authToken, "success" => "Customer Login Successfully!", "status" => 200]);
             }
         }
         else{
             // return redirect()->route('user.signin')->with('error','Email-Address And Password Are Wrong.');
-            return response()->json(["errors" => "Email-Address or Password Are Wrong."]);
+            return response()->json(["errors" => "Email-Address or Password Are Wrong.", "status" => 401]);
         }
      }
      
      public function logout(){
+        $role = Auth::user()->role;
+
         // token delete
         $user = Auth::user();
         $user->tokens()->delete();
         
         // auth logout
         Auth::logout();
-        return response()->json(["success" => "User Logout Successfully!"]);
+        return response()->json(["success" => "User $role Logout Successfully!",  "status" => 200]);
     }
     
 }

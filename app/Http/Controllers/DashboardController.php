@@ -8,6 +8,10 @@ use DB;
 class DashboardController extends Controller
 {
     public function titleChart() {
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
         $customer = DB::table('customers')->groupBy('title')->orderBy('total')->pluck(DB::raw('count(title) as total'),'title')->all();
         $labels = (array_keys($customer));
         
@@ -17,7 +21,10 @@ class DashboardController extends Controller
     }
 
     public function salesChart() {
-        
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
         $sales = DB::table('products as i')
                     ->join('orderline as ol', 'i.product_id', '=', 'ol.product_id')
                     ->join('orderinfo as oi', 'ol.orderinfo_id', '=', 'oi.orderinfo_id')
@@ -34,6 +41,10 @@ class DashboardController extends Controller
     }
 
     public function productsChart() {
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
         $products = DB::table('products as i')
                     ->join('orderline as ol', 'i.product_id', '=', 'ol.product_id')
                     ->select(DB::raw('i.name as products, sum(ol.quantity) as total'))
@@ -50,6 +61,9 @@ class DashboardController extends Controller
     }
 
     public function datesChart() {
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
         
         $dates = DB::table('products as i')
                     ->join('orderline as ol', 'i.product_id', '=', 'ol.product_id')

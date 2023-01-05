@@ -25,6 +25,10 @@ class PcspecController extends Controller
      }
 
     public function getPcspecAll(Request $request){
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
         if ($request->ajax())
         {
             $pcspecs = Pcspec::with('customers')->orderBy('pc_id','DESC')->get();
@@ -34,6 +38,10 @@ class PcspecController extends Controller
     
     public function index(Request $request)
     {
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
         if ($request->ajax())
         {
             $pcspecs = Pcspec::with('customers')->orderBy('pc_id','DESC')->get();
@@ -62,6 +70,10 @@ class PcspecController extends Controller
      */
     public function store(Request $request)
     {   
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
         $validator = \Validator::make($request->all(), [
             'cpu' => 'required',
             'motherboard' => 'required'
@@ -123,7 +135,10 @@ class PcspecController extends Controller
      */
     public function edit($id)
     {   
-        // $pcspec = Pcspec::find($id);
+        
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
 
         $pcspec = DB::table('pcspecs')
         ->join('customers', 'customers.customer_id', '=', 'pcspecs.customer_id')
@@ -142,6 +157,11 @@ class PcspecController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
+
         // if(Auth::check() && Auth::user->role == 'admin'){
         $pcspec = Pcspec::find($id);
         $pcspec->cpu = $request->cpu;
@@ -173,6 +193,11 @@ class PcspecController extends Controller
      */
     public function destroy($id)
     {
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
+
         $pcspec = Pcspec::findOrFail($id);
         $pcspec->delete();
         return response()->json(["success" => "Pcspec Deleted Successfully!","status" => 200]);

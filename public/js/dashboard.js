@@ -147,6 +147,7 @@ $(document).ready(function () {
                     datasets: [{
                         label: 'Orders-Quantity Date',
                         data: data.data,
+                        
                         backgroundColor: [
                             'rgba(75, 192, 192, 0.2)',
                             'rgba(255, 99, 132, 0.2)'

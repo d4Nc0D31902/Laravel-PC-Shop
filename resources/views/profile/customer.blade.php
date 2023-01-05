@@ -27,7 +27,7 @@
             <p class="text-muted mb-4">{{ Auth::user()->customers->addressline }}</p>
             <div class="d-flex justify-content-center mb-2">
               <button type="button" class="btn btn-primary" id="pcCreateBtn">Add PC-Spec</button>
-              <button type="button" class="btn btn-outline-primary ms-1" id="editCustomerBtn">Edit Profile</button>
+              <button type="button" class="btn btn-outline-primary ms-1" data-id="{{ Auth::user()->customers->customer_id }}" id="editCustomerBtn">Edit Profile</button>
             </div>
           </div>
         </div>
@@ -379,7 +379,7 @@
                   <p class="text-muted mb-4">{{ Auth::user()->employees->addressline }}</p>
                   <div class="d-flex justify-content-center mb-2">
                     {{-- <button type="button" class="btn btn-primary">Add PC-Spec</button> --}}
-                    <button type="button" class="btn btn-outline-primary ms-1" id="editEmployeeBtn">Edit Profile</button>
+                    <button type="button" class="btn btn-outline-primary ms-1" data-id="{{ Auth::user()->employees->employee_id }}" id="editEmployeeBtn">Edit Profile</button>
                   </div>
                 </div>
               </div>

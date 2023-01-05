@@ -166,6 +166,7 @@ $("#editEmployeeBtn").on("click", function (e) {
                 $('#editEmployeeModal').modal("hide");
                 window.location.reload();
                 bootbox.alert(data.success)
+                
             },
             error: function(error) {
                 console.log(error);

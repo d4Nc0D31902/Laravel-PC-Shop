@@ -28,7 +28,11 @@ class ProductController extends Controller
     // }
 
     public function index(Request $request)
-    {
+    {   
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
         if ($request->ajax())
         {
             $products = Product::withTrashed()->orderBy('product_id','DESC')->get();
@@ -55,7 +59,11 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
         $product = new Product;
         $product->name = $request->name;
         $product->description = $request->description;
@@ -96,6 +104,9 @@ class ProductController extends Controller
     public function edit($id)
     {
         // $product = Product::find($id);
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
 
         $product = DB::table('products')
         ->join('stock', 'stock.product_id', '=', 'products.product_id')
@@ -114,6 +125,10 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
         $product = Product::find($id);
         $product->name = $request->name;
         $product->description = $request->description;
@@ -145,6 +160,10 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
         $products = Product::findOrFail($id);
         $products->delete();
 
@@ -154,6 +173,10 @@ class ProductController extends Controller
     }
 
     public function restore($id) {
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
         $products = Product::withTrashed()->findOrFail($id);
         $products->restore();
 
@@ -174,7 +197,8 @@ class ProductController extends Controller
     }
 
     public function postCheckout(Request $request)
-    {
+    {   
+
         if(!Auth::check()){
             return response()->json(["error" => "Please login first.", "status" => 200]);
         } else{

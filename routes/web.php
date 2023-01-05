@@ -18,7 +18,7 @@ Route::get('/', function () {
 });
 
 //middleware for cruds
-Route::group(['middleware' => ['auth:sanctum', 'role:employee,admin']], function () {
+Route::group(['middleware' => ['auth:sanctum','role:employee,admin']], function () {
     //customer
     Route::resource('customer', 'CustomerController');
     Route::view('/customer', 'customer.index');
@@ -62,7 +62,7 @@ Route::group(['middleware' => ['auth:sanctum', 'role:employee,admin']], function
 }); //end of cruds
 
 //middleware for customer
-Route::group(['middleware' => ['auth:sanctum', 'role:customer,employee,admin']], function () {
+Route::group(['middleware' => ['auth:sanctum', 'role:customer']], function () {
     Route::resource('customer', 'CustomerController')->only(['edit', 'update']);
     Route::view('/profile', 'profile.customer');
 }); //end of customer
@@ -76,6 +76,7 @@ Route::get('signin', [
 
 Route::resource('shop', 'ProductController');
 Route::view('/shop', 'shop.index');
+Route::view('/homepage', 'homepage');
 
 
 // Route::group(['prefix' => 'user'], function() {

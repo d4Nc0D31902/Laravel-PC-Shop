@@ -52,7 +52,7 @@
       <div class="col">
         <div class="card shadow-sm text-center">
           <div class="chart-container">
-                  <canvas id="datesChart"></canvas>
+                  <canvas id="datesChart" aria-label="Hello ARIA World"><p>Hello Fallback World</p></canvas>
               <div class="card-body">
                   <h5 class="card-title">Order quantity sold by date</h5>
                 </div>

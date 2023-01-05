@@ -59,3 +59,4 @@ crossorigin="anonymous">
 <script src="js/profile.js"></script>
 <script src="js/consultation.js"></script>
 <script src="js/dashboard.js"></script>
+{{-- <script src="js/navbar.js"></script> --}}

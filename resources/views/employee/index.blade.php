@@ -1,6 +1,7 @@
 @extends('layouts.base')
 @section('body')
 
+<div id="employee-crud">
 <h1 class="display-6 fw-bold">Employee CRUD</h1>
 <div class="alert alert-success" style="display:none"></div>
 <meta name="csrf-token" content="{{ csrf_token() }}" />
@@ -146,4 +147,5 @@
     {{-- end of edit --}}
 
     <br>
+</div>
 @endsection

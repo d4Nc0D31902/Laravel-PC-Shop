@@ -1,6 +1,7 @@
 @extends('layouts.base')
 @section('body')
 
+<div id="customer-crud">
 <h1 class="display-6 fw-bold">Customer CRUD</h1>
 <div class="container-fluid py-4 bg-light rounded-3 shadow-sm">
     <div class="container">
@@ -111,6 +112,7 @@
     </div>
 </div>
 {{-- end of create --}}
+</div>
 
 {{-- start of edit --}}
 {{-- <div class="modal fade" id="editCustomerModal" role="dialog" style="display:none">

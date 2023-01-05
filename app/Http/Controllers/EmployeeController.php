@@ -21,7 +21,11 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
+    {   
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
         if ($request->ajax())
         {
             // $employees = Employee::withTrashed()->with('users')->orderBy('employee_id','DESC')->get();
@@ -51,6 +55,9 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {   
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
 
         $validator = \Validator::make($request->all(), [
             'email' => 'email| required| unique:users',
@@ -106,9 +113,12 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
+    {   
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
         // $employee = Employee::with('users')->find($id);
-        $id = Auth::user()->employees->employee_id;
+        // $id = Auth::user()->employees->employee_id;
 
         $employee = DB::table('employees')
         ->join('users', 'users.id', '=', 'employees.user_id')
@@ -122,6 +132,9 @@ class EmployeeController extends Controller
     {
         // $employee = Employee::with('users')->find($id);
         // $id = Auth::user()->employees->employee_id;
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
 
         $employee = DB::table('employees')
         ->join('users', 'users.id', '=', 'employees.user_id')
@@ -139,6 +152,10 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
         $employee = Employee::find($id);
         $employee->title = $request->title;
         $employee->fname = $request->fname;
@@ -173,11 +190,16 @@ class EmployeeController extends Controller
             $user->update();   
         }
 
-        return response()->json(["success" => "Account updated successfully.", $employee, $user]);
+        return response()->json(["success" => "Account updated successfully.", "employee" => $employee]);
     } 
 
     public function updateRole(Request $request, $id)
     {   
+
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
         if (Auth::check() && Auth::user()->role == 'admin'){
             $employee = Employee::find($id);
 
@@ -200,6 +222,10 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {   
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
         if (Auth::check() && Auth::user()->role == 'admin'){
         $employee = Employee::findOrFail($id);
             $user = User::where('id',$employee->user_id)->delete();
@@ -212,6 +238,10 @@ class EmployeeController extends Controller
     }
 
     public function restore($id) {
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
         if (Auth::check() && Auth::user()->role == 'admin'){
             $employee = Employee::withTrashed()->find($id);
             $user = User::where('id',$employee->user_id)->restore();

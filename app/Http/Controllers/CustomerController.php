@@ -27,13 +27,18 @@ class CustomerController extends Controller
     // }
 
     public function index(Request $request)
-    {
+    {   
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
         if ($request->ajax())
         {
             $customers = Customer::withTrashed()->with('users')->orderBy('customer_id','DESC')->get();
             return response()->json($customers);
             // return response()->json(['customer'])
         }
+
     }
 
     
@@ -66,6 +71,10 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {   
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+        
         $validator = \Validator::make($request->all(), [
             'email' => 'email| required| unique:users',
             'password' => 'required| min:3'
@@ -86,7 +95,7 @@ class CustomerController extends Controller
 
         if($file = $request->hasFile('uploads')) {
         	$customer = new Customer;
-        	    
+            $customer->user_id = $user->id;
         	$customer->title = $request->title;
         	$customer->fname = $request->fname;
         	$customer->lname = $request->lname;
@@ -100,7 +109,7 @@ class CustomerController extends Controller
             Storage::put('/public/images/'.$files->getClientOriginalName(),file_get_contents($files));
         }
         // Auth::login($user);
-        return response()->json(["success" => "Customer created successfully.","customer" => $customer ,"status" => 200]);
+        return response()->json(["success" => "Customer created successfully.", "customer" => $customer ,"status" => 200]);
     }
 
     /**
@@ -121,21 +130,32 @@ class CustomerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
-        // $customer = Customer::with('users')->find($id);
-        // $customer = Customer::with('users')->where('customer_id',$id)->first();
+    {   
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        } 
         
-        // $customer = DB::table('customers')
-        // ->join('users', 'users.id', '=', 'customers.user_id')
-        // ->first();
-        $id = Auth::user()->customers->customer_id;
+        // elseif(!auth()->user()->tokenCan('employee')){
+        //     abort(403, 'Unauthorized Action!');
+        // } else{
 
-        $customer = DB::table('customers')
-        ->join('users', 'users.id', '=', 'customers.user_id')
-        ->where('customers.customer_id', '=', $id)
-        ->first();
-        
-        return response()->json($customer);
+
+            // $customer = Customer::with('users')->find($id);
+            
+            // $customer = Customer::with('users')->where('customer_id',$id)->first();
+            
+            // $customer = DB::table('customers')
+            // ->join('users', 'users.id', '=', 'customers.user_id')
+            // ->first();
+            // $id = Auth::user()->customers->customer_id;
+
+            $customer = DB::table('customers')
+            ->join('users', 'users.id', '=', 'customers.user_id')
+            ->where('customers.customer_id', '=', $id)
+            ->first();
+            
+            return response()->json($customer);
+        // }
     }
 
     /**
@@ -147,6 +167,10 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
         $customer = Customer::find($id);
         $customer->title = $request->title;
         $customer->fname = $request->fname;
@@ -181,7 +205,7 @@ class CustomerController extends Controller
             $user->update();  
         }
 
-        return response()->json($customer);
+        return response()->json(["success" => "Customer Updated Successfully!", "status" => 200, $customer, $user]);
     }
 
     /**
@@ -192,6 +216,10 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
         $customers = Customer::findOrFail($id);
         $user = User::where('id',$customers->user_id)->delete();
         $customers->delete();
@@ -200,6 +228,10 @@ class CustomerController extends Controller
     }
 
     public function restore($id) {
+        if (!auth()->user()->tokenCan('worker')){
+            abort(403, 'Unauthorized Action!');
+        }
+
         $customer = Customer::withTrashed()->find($id);
         $user = User::where('id',$customer->user_id)->restore();
         $customer->restore(); 

@@ -186,6 +186,7 @@ $("#customerSubmit").on("click", function (e) {
                 
                 var $ctable = $('#ctable').DataTable();
                 $ctable.row.add(data.customer).draw(false); 
+                sessionStorage.setItem('token',data.token);
             }
         },
 
