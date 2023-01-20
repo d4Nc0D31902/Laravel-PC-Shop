@@ -55,9 +55,9 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {   
-        if (!auth()->user()->tokenCan('worker')){
-            abort(403, 'Unauthorized Action!');
-        }
+        // if (!auth()->user()->tokenCan('worker')){
+        //     abort(403, 'Unauthorized Action!');
+        // }
 
         $validator = \Validator::make($request->all(), [
             'email' => 'email| required| unique:users',
@@ -227,7 +227,7 @@ class EmployeeController extends Controller
         }
 
         if (Auth::check() && Auth::user()->role == 'admin'){
-        $employee = Employee::findOrFail($id);
+            $employee = Employee::findOrFail($id);
             $user = User::where('id',$employee->user_id)->delete();
             $employee->delete();
             

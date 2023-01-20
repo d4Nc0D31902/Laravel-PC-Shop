@@ -62,7 +62,7 @@ Route::group(['middleware' => ['auth:sanctum','role:employee,admin']], function 
 }); //end of cruds
 
 //middleware for customer
-Route::group(['middleware' => ['auth:sanctum', 'role:customer']], function () {
+Route::group(['middleware' => ['auth:sanctum', 'role:customer,admin,employee']], function () {
     Route::resource('customer', 'CustomerController')->only(['edit', 'update']);
     Route::view('/profile', 'profile.customer');
 }); //end of customer

@@ -71,9 +71,9 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {   
-        if (!auth()->user()->tokenCan('worker')){
-            abort(403, 'Unauthorized Action!');
-        }
+        // if (!auth()->user()->tokenCan('worker')){
+        //     abort(403, 'Unauthorized Action!');
+        // }
         
         $validator = \Validator::make($request->all(), [
             'email' => 'email| required| unique:users',

@@ -40,11 +40,11 @@ $(document).ready(function(){
                         className: 'rubberBand animated'
                     });
 
-                    // setTimeout(function(){
-                    //         window.location.href = "/profile";
-                    // }, 1000);
+                    setTimeout(function(){
+                            window.location.href = "/profile";
+                    }, 1000);
 
-                    sessionStorage.setItem('token',data.token);
+                    // sessionStorage.setItem('token',data.token);
                 }
             },
             error: function(error) {
