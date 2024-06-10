@@ -28,7 +28,7 @@
 //                 tr.append("<td align='center'><a href='#' data-bs-toggle='modal' data-bs-target='#editModal' id='editbtn' data-id="+ id + "><i class='fa-solid fa-user-pen' aria-hidden='true' style='font-size:24px' ></a></i></td>");
 //                 tr.append("<td align='center'><a href='#' class='deletebtn' data-id=" + id +"><i  class='fa-sharp fa-solid fa-trash' style='font-size:24px; color:red'></a></i></td>");
 //                 tr.append("<td align='center'><a href="+'/customer/'+ id +'/restore'+"><i class='fa-solid fa-trash-can-arrow-up' aria-hidden='true' style='font-size:24px; color:green' ></a></i></td>");
-                
+
 //                 $("#cbody").append(tr);
 //             });
 //         },
@@ -78,18 +78,18 @@
 //     }); //end of submit
 
 $(document).ready(function () {
-    $('#ctable').DataTable({
-        ajax:{
-            url:"/api/customer",
+    $("#ctable").DataTable({
+        ajax: {
+            url: "/api/customer",
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
-            dataSrc: ""
+            dataSrc: "",
         },
-        dom:'Bfrtip',
-        buttons:[
-            'pdf',
-            'excel',
+        dom: "Bfrtip",
+        buttons: [
+            "pdf",
+            "excel",
             // {
             //     text:'Add New Customer',
             //     className: 'btn btn-primary',
@@ -99,19 +99,24 @@ $(document).ready(function () {
             //     }
             // }
         ],
-        columns:[
-            {data: 'customer_id'},
-            {data: 'title'},
-            {data: 'lname'},
-            {data: 'fname'},
-            {data: 'addressline'},
-            {data: 'town'},
-            {data: 'zipcode'},
-            {data: 'phone'},
+        columns: [
+            { data: "customer_id" },
+            { data: "title" },
+            { data: "lname" },
+            { data: "fname" },
+            { data: "addressline" },
+            { data: "town" },
+            { data: "zipcode" },
+            { data: "phone" },
             // {data: 'users.email'},
-            {data: null,
-                render: function (data,type,JsonResultRow,row) {
-                    return '<img src="/storage/' + JsonResultRow.imagePath + '" width="100px" height="100px">';
+            {
+                data: null,
+                render: function (data, type, JsonResultRow, row) {
+                    return (
+                        '<img src="/storage/' +
+                        JsonResultRow.imagePath +
+                        '" width="100px" height="100px">'
+                    );
                 },
             },
             // {data: null,
@@ -120,116 +125,129 @@ $(document).ready(function () {
             //             data.customer_id + "><i class='fa-solid fa-pen-to-square' aria-hidden='true' style='font-size:30px' ></i></a>";
             //     },
             // },
-            {data: null,
+            {
+                data: null,
                 render: function (data, type, row) {
-                    if(data.deleted_at)
-                    return "<span class='badge rounded-pill bg-secondary'>Deactivated</span>";
+                    if (data.deleted_at)
+                        return "<span class='badge rounded-pill bg-secondary'>Deactivated</span>";
                     else
-                    return "<span class='badge rounded-pill bg-success'>Active</span>";
-                }, orderable: false, searchable: false
+                        return "<span class='badge rounded-pill bg-success'>Active</span>";
+                },
+                orderable: false,
+                searchable: false,
             },
-            {data: null,
+            {
+                data: null,
                 render: function (data, type, row) {
-                    if(data.deleted_at)
-                    return "<a href='#' class='restorebtn' data-id=" + data.customer_id + "><i class='fa-solid fa-rotate-right' style='font-size:30px; color:primary'></a></i>";
-                    else 
-                    return "<a href='#' class='deletebtn' data-id=" + data.customer_id + "><i class='fa-sharp fa-solid fa-trash' style='font-size:30px; color:red'></a></i>";
-                },  orderable: false, searchable: false
+                    if (data.deleted_at)
+                        return (
+                            "<a href='#' class='restorebtn' data-id=" +
+                            data.customer_id +
+                            "><i class='fa-solid fa-rotate-right' style='font-size:30px; color:primary'></a></i>"
+                        );
+                    else
+                        return (
+                            "<a href='#' class='deletebtn' data-id=" +
+                            data.customer_id +
+                            "><i class='fa-sharp fa-solid fa-trash' style='font-size:30px; color:red'></a></i>"
+                        );
+                },
+                orderable: false,
+                searchable: false,
             },
-        ]
-        
-    })//end datatables
+        ],
+    }); //end datatables
 
-// }); //end of document
+    // }); //end of document
 
+    $("#customerCreateBtn").on("click", function (e) {
+        $("#customerModal").modal("show");
+    });
 
-$("#customerCreateBtn").on("click", function (e) {
-    $('#customerModal').modal('show');
-});  
+    $("#customerSubmit").on("click", function (e) {
+        e.preventDefault();
+        // var data = $("#iform").serialize();
+        var data = $("#cform")[0];
+        console.log(data);
+        let formData = new FormData(data);
 
-$("#customerSubmit").on("click", function (e) {
-    e.preventDefault();
-    // var data = $("#iform").serialize();
-    var data = $('#cform')[0];
-    console.log(data);
-    let formData = new FormData(data);
-
-    console.log(formData);
-    for (var pair of formData.entries()) {
-        console.log(pair[0] + ', ' + pair[1]);
-    }
-
-    $.ajax({
-        type: "POST",
-        url: "/api/customer",
-        data: formData,
-        contentType: false,
-        processData: false,
-        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-        dataType:"json", 
-        accepts: {
-            json: 'application/json'
-        },
-        success:function(data){
-            
-            if (data.errors) {
-                // jQuery.each(data.errors, function(key, value){
-                // jQuery('.alert-danger').show();
-                // jQuery('.alert-danger').append('<p>'+value+'</p>');
-                // });
-                bootbox.alert({
-                    message: data.errors,
-                    className: 'rubberBand animated'});
-            } else {
-                console.log(data);
-                $("#customerModal").modal("hide");
-                
-                var $ctable = $('#ctable').DataTable();
-                $ctable.row.add(data.customer).draw(false); 
-                sessionStorage.setItem('token',data.token);
-            }
-        },
-
-        error:function (error){
-            console.log(error);
+        console.log(formData);
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ", " + pair[1]);
         }
-    })
-});
 
-$("#editCustomerBtn").on("click", function (e) {
-    e.preventDefault();
-    var id = $(this).data('id');
-    $('#editCustomerModal').modal('show');
-
-
-    $.ajax({
-        type: "GET",
-        url: "api/customer/" + id + "/edit",
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        dataType: "json",
-        success: function(data){
-               console.log(data);
-               $("#cccustomer_id").val(data.customer_id);
-               $("#cctitle").val(data.title);
-               $("#cclname").val(data.lname);
-               $("#ccfname").val(data.fname);
-               $("#ccaddressline").val(data.addressline);
-               $("#cctown").val(data.town);
-               $("#cczipcode").val(data.zipcode);
-               $("#ccphone").val(data.phone);
-               $("#ccemail").val(data.email);
+        $.ajax({
+            type: "POST",
+            url: "/api/customer",
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
-            
-            error: function(){
-                console.log('AJAX load did not work');
-                alert("error");
-            }
+            dataType: "json",
+            accepts: {
+                json: "application/json",
+            },
+            success: function (data) {
+                if (data.errors) {
+                    // jQuery.each(data.errors, function(key, value){
+                    // jQuery('.alert-danger').show();
+                    // jQuery('.alert-danger').append('<p>'+value+'</p>');
+                    // });
+                    bootbox.alert({
+                        message: data.errors,
+                        className: "rubberBand animated",
+                    });
+                } else {
+                    console.log(data);
+                    $("#customerModal").modal("hide");
+
+                    var $ctable = $("#ctable").DataTable();
+                    $ctable.row.add(data.customer).draw(false);
+                    sessionStorage.setItem("token", data.token);
+                }
+            },
+
+            error: function (error) {
+                console.log(error);
+            },
         });
-    });//end edit fetch
-    
-    $("#updatebtnCustomer").on('click', function(e) {
+    });
+
+    $("#editCustomerBtn").on("click", function (e) {
+        e.preventDefault();
+        var id = $(this).data("id");
+        $("#editCustomerModal").modal("show");
+
+        $.ajax({
+            type: "GET",
+            url: "api/customer/" + id + "/edit",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                $("#cccustomer_id").val(data.customer_id);
+                $("#cctitle").val(data.title);
+                $("#cclname").val(data.lname);
+                $("#ccfname").val(data.fname);
+                $("#ccaddressline").val(data.addressline);
+                $("#cctown").val(data.town);
+                $("#cczipcode").val(data.zipcode);
+                $("#ccphone").val(data.phone);
+                $("#ccemail").val(data.email);
+            },
+
+            error: function () {
+                console.log("AJAX load did not work");
+                alert("error");
+            },
+        });
+    }); //end edit fetch
+
+    $("#updatebtnCustomer").on("click", function (e) {
         e.preventDefault();
         // var id = $('#cccustomer_id').val();
         // //var data = $("#updateItemform").serialize();
@@ -239,37 +257,39 @@ $("#editCustomerBtn").on("click", function (e) {
         // var cRow = $("tr td:contains(" + id + ")").closest('tr');
         // var data =$("#cusform").serialize();
 
-        var id = $('#cccustomer_id').val();
-        var data = $('#cusform')[0];
+        var id = $("#cccustomer_id").val();
+        var data = $("#cusform")[0];
         var formData = new FormData(data);
-        var table = $('#ctable').DataTable();
+        var table = $("#ctable").DataTable();
         console.log(data);
 
         $.ajax({
             type: "POST",
-            url: "api/customer/update/"+ id,
+            url: "api/customer/update/" + id,
             data: formData,
             contentType: false,
             processData: false,
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
             dataType: "json",
-            success: function(data) {
+            success: function (data) {
                 console.log(data);
-                $('#editCustomerModal').modal("hide");
+                $("#editCustomerModal").modal("hide");
                 // table.row(cRow).data(data).invalidate().draw(false);
                 window.location.reload();
             },
-            error: function(error) {
+            error: function (error) {
                 console.log(error);
-            }
+            },
         });
-    });//end update
+    }); //end update
 
     // $("#updatebtnCustomer").on('click', function(e) {
     //     e.preventDefault();
     //     var id = $('#cccustomer_id').val();
     //     var data = $('#cusform')[0];
-       
+
     //     var formData = new FormData(data);
     //     //var data = $("#updateItemform").serialize();
 
@@ -298,11 +318,10 @@ $("#editCustomerBtn").on("click", function (e) {
     //     });
     // });//end update
 
-
     $("#ctable tbody").on("click", "a.deletebtn", function (e) {
-        var table = $('#ctable').DataTable();
-        var id = $(this).data('id');
-        var $row = $(this).closest('tr');
+        var table = $("#ctable").DataTable();
+        var id = $(this).data("id");
+        var $row = $(this).closest("tr");
         console.log(id);
 
         e.preventDefault();
@@ -331,13 +350,13 @@ $("#editCustomerBtn").on("click", function (e) {
                         dataType: "json",
                         success: function (data) {
                             console.log(data);
-                            
+
                             // $row.fadeOut(4000, function(){
                             //     table.row($row).remove().draw(false)
                             // });
                             window.location.reload();
 
-                            bootbox.alert(data.success)
+                            bootbox.alert(data.success);
                         },
 
                         error: function (error) {
@@ -346,12 +365,12 @@ $("#editCustomerBtn").on("click", function (e) {
                     });
             },
         });
-    });//DELETE
+    }); //DELETE
 
     $("#ctable tbody").on("click", "a.restorebtn", function (e) {
-        var table = $('#ctable').DataTable();
-        var id = $(this).data('id');
-        var $row = $(this).closest('tr');
+        var table = $("#ctable").DataTable();
+        var id = $(this).data("id");
+        var $row = $(this).closest("tr");
         // var cRow = $("tr td:contains(" + id + ")").closest('tr');
         console.log(id);
 
@@ -381,13 +400,13 @@ $("#editCustomerBtn").on("click", function (e) {
                         dataType: "json",
                         success: function (data) {
                             console.log(data);
-                            
+
                             // $row.fadeOut(4000, function(){
                             //     table.row($row).remove().draw(false)
                             // });
                             window.location.reload();
                             // table.row(cRow).data(data).invalidate().draw(false);
-                            bootbox.alert(data.success)
+                            bootbox.alert(data.success);
                         },
 
                         error: function (error) {
@@ -397,5 +416,4 @@ $("#editCustomerBtn").on("click", function (e) {
             },
         });
     });
-
 }); // end of document

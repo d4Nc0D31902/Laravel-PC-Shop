@@ -20,28 +20,27 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    
+
     // public function getCustomer()
     // {
     //     return View::make('customer.index');
     // }
 
     public function index(Request $request)
-    {   
-        if (!auth()->user()->tokenCan('worker')){
+    {
+        if (!auth()->user()->tokenCan('worker')) {
             abort(403, 'Unauthorized Action!');
         }
 
-        if ($request->ajax())
-        {
-            $customers = Customer::withTrashed()->with('users')->orderBy('customer_id','DESC')->get();
+        if ($request->ajax()) {
+            $customers = Customer::withTrashed()->with('users')->orderBy('customer_id', 'DESC')->get();
             return response()->json($customers);
             // return response()->json(['customer'])
         }
 
     }
 
-    
+
     // public function getCustomerAll(Request $request)
     // {
     //     // $customers = Customer::orderBy('id','DESC')->get();
@@ -70,46 +69,46 @@ class CustomerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {
         // if (!auth()->user()->tokenCan('worker')){
         //     abort(403, 'Unauthorized Action!');
         // }
-        
+
         $validator = \Validator::make($request->all(), [
             'email' => 'email| required| unique:users',
             'password' => 'required| min:3'
         ]);
-        
-        if($validator->fails()){
-            return response()->json(['errors'=>$validator->errors()->all()]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->all()]);
         }
 
         $user = new User([
-            'name' => $request->input('fname').' '.$request->lname,
+            'name' => $request->input('fname') . ' ' . $request->lname,
             'email' => $request->input('email'),
             'password' => bcrypt($request->input('password'))
         ]);
-        
+
         $user->role = 'customer';
         $user->save();
 
-        if($file = $request->hasFile('uploads')) {
-        	$customer = new Customer;
+        if ($file = $request->hasFile('uploads')) {
+            $customer = new Customer;
             $customer->user_id = $user->id;
-        	$customer->title = $request->title;
-        	$customer->fname = $request->fname;
-        	$customer->lname = $request->lname;
-        	$customer->addressline = $request->addressline;
-        	$customer->zipcode = $request->zipcode;
-        	$customer->town = $request->town;
-        	$customer->phone = $request->phone;
+            $customer->title = $request->title;
+            $customer->fname = $request->fname;
+            $customer->lname = $request->lname;
+            $customer->addressline = $request->addressline;
+            $customer->zipcode = $request->zipcode;
+            $customer->town = $request->town;
+            $customer->phone = $request->phone;
             $files = $request->file('uploads');
-        	$customer->imagePath = 'images/'.$files->getClientOriginalName();
-        	$customer->save();
-            Storage::put('/public/images/'.$files->getClientOriginalName(),file_get_contents($files));
+            $customer->imagePath = 'images/' . $files->getClientOriginalName();
+            $customer->save();
+            Storage::put('/public/images/' . $files->getClientOriginalName(), file_get_contents($files));
         }
         // Auth::login($user);
-        return response()->json(["success" => "Customer created successfully.", "customer" => $customer ,"status" => 200]);
+        return response()->json(["success" => "Customer created successfully.", "customer" => $customer, "status" => 200]);
     }
 
     /**
@@ -130,31 +129,31 @@ class CustomerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {   
-        if (!auth()->user()->tokenCan('worker')){
+    {
+        if (!auth()->user()->tokenCan('worker')) {
             abort(403, 'Unauthorized Action!');
-        } 
-        
+        }
+
         // elseif(!auth()->user()->tokenCan('employee')){
         //     abort(403, 'Unauthorized Action!');
         // } else{
 
 
-            // $customer = Customer::with('users')->find($id);
-            
-            // $customer = Customer::with('users')->where('customer_id',$id)->first();
-            
-            // $customer = DB::table('customers')
-            // ->join('users', 'users.id', '=', 'customers.user_id')
-            // ->first();
-            // $id = Auth::user()->customers->customer_id;
+        // $customer = Customer::with('users')->find($id);
 
-            $customer = DB::table('customers')
+        // $customer = Customer::with('users')->where('customer_id',$id)->first();
+
+        // $customer = DB::table('customers')
+        // ->join('users', 'users.id', '=', 'customers.user_id')
+        // ->first();
+        // $id = Auth::user()->customers->customer_id;
+
+        $customer = DB::table('customers')
             ->join('users', 'users.id', '=', 'customers.user_id')
             ->where('customers.customer_id', '=', $id)
             ->first();
-            
-            return response()->json($customer);
+
+        return response()->json($customer);
         // }
     }
 
@@ -167,7 +166,7 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (!auth()->user()->tokenCan('worker')){
+        if (!auth()->user()->tokenCan('worker')) {
             abort(403, 'Unauthorized Action!');
         }
 
@@ -180,29 +179,29 @@ class CustomerController extends Controller
         $customer->town = $request->town;
         $customer->phone = $request->phone;
 
-        if($files = $request->hasFile('uploads')) {
-        $files = $request->file('uploads');
-        $customer->imagePath = 'images/'.$files->getClientOriginalName();
-        $customer->update();
-        Storage::put('/public/images/'.$files->getClientOriginalName(),file_get_contents($files));   
+        if ($files = $request->hasFile('uploads')) {
+            $files = $request->file('uploads');
+            $customer->imagePath = 'images/' . $files->getClientOriginalName();
+            $customer->update();
+            Storage::put('/public/images/' . $files->getClientOriginalName(), file_get_contents($files));
         } else {
             $customer->update();
         }
 
         $user = User::find($customer->user_id);
         $user->name = $request->fname . ' ' . $request->lname;
-        if(!empty($request->input('email')) and !empty($request->input('password'))){
+        if (!empty($request->input('email')) and !empty($request->input('password'))) {
             $user->email = $request->email;
             $user->password = bcrypt($request->input('password'));
             $user->update();
-        } elseif(!empty($request->input('email'))){
+        } elseif (!empty($request->input('email'))) {
             $user->email = $request->email;
             $user->update();
-        } elseif(!empty($request->input('password'))){
+        } elseif (!empty($request->input('password'))) {
             $user->password = bcrypt($request->input('password'));
             $user->update();
-        } else{
-            $user->update();  
+        } else {
+            $user->update();
         }
 
         return response()->json(["success" => "Customer Updated Successfully!", "status" => 200, $customer, $user]);
@@ -216,26 +215,27 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        if (!auth()->user()->tokenCan('worker')){
+        if (!auth()->user()->tokenCan('worker')) {
             abort(403, 'Unauthorized Action!');
         }
 
         $customers = Customer::findOrFail($id);
-        $user = User::where('id',$customers->user_id)->delete();
+        $user = User::where('id', $customers->user_id)->delete();
         $customers->delete();
 
-        return response()->json(["success" => "Customer Deactivated Successfully!","status" => 200]);
+        return response()->json(["success" => "Customer Deactivated Successfully!", "status" => 200]);
     }
 
-    public function restore($id) {
-        if (!auth()->user()->tokenCan('worker')){
+    public function restore($id)
+    {
+        if (!auth()->user()->tokenCan('worker')) {
             abort(403, 'Unauthorized Action!');
         }
 
         $customer = Customer::withTrashed()->find($id);
-        $user = User::where('id',$customer->user_id)->restore();
-        $customer->restore(); 
+        $user = User::where('id', $customer->user_id)->restore();
+        $customer->restore();
 
-        return response()->json(["success" => "Customer has been Restored!","status" => 200]);
+        return response()->json(["success" => "Customer has been Restored!", "status" => 200]);
     }
 }
